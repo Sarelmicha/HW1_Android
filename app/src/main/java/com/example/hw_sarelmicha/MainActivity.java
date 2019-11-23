@@ -62,8 +62,51 @@ public class MainActivity extends AppCompatActivity {
         addClickListeners();
         addEnemies(NUM_OF_COLS);
         addLife();
+        setUpAnimations();
+
+    }
+
+    private void setUpAnimations(){
         animations = new ValueAnimator[NUM_OF_COLS];
 
+        final float initialHeight = -100;
+
+        for (animationIndex = 0; animationIndex < NUM_OF_COLS; animationIndex++) {
+
+            animations[animationIndex] = ValueAnimator.ofFloat(initialHeight, screenHeight);
+            animations[animationIndex].setDuration(8000);
+            animations[animationIndex].setStartDelay((long) (Math.random() * (4000)));
+            animations[animationIndex].setRepeatCount(Animation.INFINITE);
+            animations[animationIndex].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                private int x = animationIndex;
+                @Override
+                public void onAnimationUpdate(ValueAnimator updatedAnimation) {
+
+                    float animatedValue = (float)updatedAnimation.getAnimatedValue();
+
+                    enemies[x].setTranslationY(animatedValue);
+                    enemies[x].setVisibility(View.VISIBLE);
+                    if(isCollide(enemies[x])){
+                        makeOuchSound();
+                        updatedAnimation.setStartDelay(0);
+                        updatedAnimation.start();
+                        reduceLife();
+                    }
+                    else if(enemies[x].getY()  >= screenHeight - 1){ //Enemy is Out of Screen
+                        updateScore();
+                        updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
+                        updatedAnimation.start();
+                    }
+                }
+            });
+
+            animations[animationIndex].start();
+        }
+    }
+
+    private void makeOuchSound() {
+        ouchSound.start();
     }
 
     private void addLife() {
@@ -90,43 +133,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        final float initialHeight = -100;
-
-        for (animationIndex = 0; animationIndex < NUM_OF_COLS; animationIndex++) {
-
-            animations[animationIndex] = ValueAnimator.ofFloat(initialHeight, screenHeight);
-            animations[animationIndex].setDuration(8000);
-            animations[animationIndex].setStartDelay((long) (Math.random() * (2000)));
-            animations[animationIndex].setRepeatCount(Animation.INFINITE);
-            animations[animationIndex].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-                private int x = animationIndex;
-                @Override
-                public void onAnimationUpdate(ValueAnimator updatedAnimation) {
-
-                        float animatedValue = (float)updatedAnimation.getAnimatedValue();
-
-                        enemies[x].setTranslationY(animatedValue);
-                        enemies[x].setVisibility(View.VISIBLE);
-                        if(isCollide(enemies[x])){
-                            makeOuchSound();
-                            updatedAnimation.setStartDelay(0);
-                            updatedAnimation.start();
-                            reduceLife();
-                        }
-                        else if(enemies[x].getY()  >= screenHeight - 1){ //Enemy is Out of Screen
-                            updateScore();
-                            updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
-                            updatedAnimation.start();
-                        }
-                }
-
-                private void makeOuchSound() {
-                    ouchSound.start();
-                }
-            });
-
-            animations[animationIndex].start();
+        for (int i = 0; i < NUM_OF_COLS; i++) {
+            animations[i].resume();
         }
     }
 
@@ -139,10 +147,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        numOfLife = 3;
 
         for (int i = 0; i < NUM_OF_COLS ; i++) {
-            animations[i].end();
+            animations[i].pause();
         }
     }
 
@@ -166,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
     private void endGame() {
         Intent intent = new Intent(this, GameOverScreen.class);
         startActivity(intent);
+        finish();
     }
 
     private boolean isCollide(View enemy) {

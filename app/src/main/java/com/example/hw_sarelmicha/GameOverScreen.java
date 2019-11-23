@@ -46,10 +46,13 @@ public class GameOverScreen extends AppCompatActivity {
     private void restartGame() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void goToMainMenu() {
         Intent intent = new Intent(this, OpenScreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+        finish();
     }
 }
