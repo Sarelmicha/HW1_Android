@@ -3,6 +3,7 @@ package com.example.hw_sarelmicha;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +23,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class MainActivity extends AppCompatActivity {
 
     private final int NUM_OF_COLS = 3;
+    private int numOfLife = 3;
     private View[] enemies;
+    private View[] life;
     private LinearLayout[] cols;
     private ValueAnimator[] animations;
     private RelativeLayout mainLayout;
@@ -49,7 +52,17 @@ public class MainActivity extends AppCompatActivity {
 
         addClickListeners();
         addEnemies(NUM_OF_COLS);
+        addLife();
         animations = new ValueAnimator[NUM_OF_COLS];
+
+    }
+
+    private void addLife() {
+        life = new View[numOfLife];
+
+        life[0] = (View)findViewById(R.id.life0);
+        life[1] = (View)findViewById(R.id.life1);
+        life[2] = (View)findViewById(R.id.life2);
 
     }
 
@@ -83,17 +96,53 @@ public class MainActivity extends AppCompatActivity {
                 public void onAnimationUpdate(ValueAnimator updatedAnimation) {
 
                         float animatedValue = (float)updatedAnimation.getAnimatedValue();
+                    //Log.d("CHECK", " " + animatedValue + " and X is " + x);
                         enemies[x].setTranslationY(animatedValue);
                         enemies[x].setVisibility(View.VISIBLE);
-                        if(enemies[x].getY()  > screenHeight - 10){
+                        if(isCollide(enemies[x])){
+                            updatedAnimation.setStartDelay(0);
+                            updatedAnimation.start();
+                            reduceLife();
+                        }
+                        if(enemies[x].getY()  > screenHeight - 10){ //Enemie is Out of Screen
                             updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
                             updatedAnimation.start();
                         }
+
                 }
             });
 
             animations[animationIndex].start();
         }
+    }
+
+    private synchronized void reduceLife() {
+
+        numOfLife--;
+        if(numOfLife >= 0){
+            life[numOfLife].setVisibility(View.INVISIBLE);
+        }
+        else {
+            endGame();
+        }
+
+    }
+
+    private void endGame() {
+    }
+
+    private boolean isCollide(View enemy) {
+
+        int[] locationEnemy = new int[2];
+        int[] locationPlayer = new int[2];
+
+        enemy.getLocationOnScreen(locationEnemy);
+        player.getLocationOnScreen(locationPlayer);
+
+        Rect R1=new Rect((int)locationEnemy[0], (int)locationEnemy[1] , (int)(locationEnemy[0] + enemy.getWidth()), (int)(locationEnemy[1] + enemy.getHeight()));
+        Rect R2=new Rect((int)locationPlayer[0] + (player.getWidth() / 2) , (int)locationPlayer[1] + (player.getHeight() / 2), (int)(locationPlayer[0] + player.getWidth()) - (player.getWidth() / 2), (int)(locationPlayer[1] + player.getHeight()));
+
+        return R1.intersect(R2);
     }
 
     private void addEnemies(int numOfCols) {

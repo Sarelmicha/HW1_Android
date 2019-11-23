@@ -23,11 +23,19 @@
         android:layout_height="wrap_content">
 
         <View
-            android:id="@+id/life1"
+            android:id="@+id/life0"
             android:layout_width="40dp"
             android:layout_height="30dp"
             android:layout_marginTop="5dp"
             android:layout_alignParentRight="true"
+            android:background="@drawable/life"/>
+
+        <View
+            android:id="@+id/life1"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/life0"
             android:background="@drawable/life"/>
 
         <View
@@ -36,14 +44,6 @@
             android:layout_height="30dp"
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/life1"
-            android:background="@drawable/life"/>
-
-        <View
-            android:id="@+id/life3"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/life2"
             android:background="@drawable/life"/>
 
     </RelativeLayout>
@@ -71,8 +71,8 @@
         android:id="@+id/player"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
         android:background="@drawable/playerturtle" />
 
 </RelativeLayout>
