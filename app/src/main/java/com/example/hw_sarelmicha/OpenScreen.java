@@ -20,6 +20,11 @@ public class OpenScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_screen);
+        if(mediaPlayer == null){
+            mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic);
+            mediaPlayer.start();
+        }
+
 
         newGameBtn = (Button)findViewById(R.id.newGameBtn);
         newGameBtn.setOnClickListener(new View.OnClickListener() {

@@ -20,6 +20,7 @@
             android:src="@drawable/turtleopenscreen" />
 
         <TextView
+            android:fontFamily="monospace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Planet Saver "
@@ -28,33 +29,38 @@
 
 
         <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:fontFamily="monospace"
             android:id="@+id/newGameBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_game"
             android:textColor="#FFFFFF"
+            android:gravity="center"
             android:textSize="20dp" />
 
         <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:fontFamily="monospace"
             android:id="@+id/highScoresBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:text="@string/high_score"
             android:textColor="#FFFFFF"
+            android:gravity="center"
             android:textSize="20dp" />
 
         <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:fontFamily="monospace"
             android:id="@+id/exitBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:text="@string/exit"
             android:textColor="#FFFFFF"
+            android:gravity="center"
             android:textSize="20dp" />
     </LinearLayout>
-
-
 
 </RelativeLayout>
 

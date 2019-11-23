@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private int screenWidth;
     private int screenHeight;
     private static int animationIndex;
+    private MediaPlayer ouchSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         player = (View)findViewById(R.id.player);
         leftScreen = (RelativeLayout)findViewById(R.id.left_screen);
         rightScreen = (RelativeLayout)findViewById(R.id.right_screen);
+        ouchSound = MediaPlayer.create(this, R.raw.ouchsound);
 
         addClickListeners();
         addEnemies(NUM_OF_COLS);
@@ -100,14 +102,19 @@ public class MainActivity extends AppCompatActivity {
                         enemies[x].setTranslationY(animatedValue);
                         enemies[x].setVisibility(View.VISIBLE);
                         if(isCollide(enemies[x])){
+                            makeOuchSound();
                             updatedAnimation.setStartDelay(0);
                             updatedAnimation.start();
                             reduceLife();
                         }
-                        if(enemies[x].getY()  > screenHeight - 10){ //Enemie is Out of Screen
+                        if(enemies[x].getY()  > screenHeight - 10){ //Enemy is Out of Screen
                             updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
                             updatedAnimation.start();
                         }
+                }
+
+                private void makeOuchSound() {
+                    ouchSound.start();
                 }
             });
 
