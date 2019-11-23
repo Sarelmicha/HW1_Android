@@ -3,6 +3,7 @@ package com.example.hw_sarelmicha;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Parcelable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -51,5 +52,6 @@ public class OpenScreen extends AppCompatActivity {
 
     public static void exitGame() {
         System.exit(0);
+
     }
 }

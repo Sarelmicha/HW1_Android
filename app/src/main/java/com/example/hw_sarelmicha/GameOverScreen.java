@@ -1,5 +1,6 @@
 package com.example.hw_sarelmicha;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class GameOverScreen extends AppCompatActivity {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finishAffinity();
                 OpenScreen.exitGame();
             }
         });
