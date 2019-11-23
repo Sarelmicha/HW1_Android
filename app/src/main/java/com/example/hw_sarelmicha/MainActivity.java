@@ -1,10 +1,12 @@
 package com.example.hw_sarelmicha;
 //Created by Mor Soferian and Sarel Micha
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +19,6 @@ import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setScreenHeightAndWidth();
+
 
         mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
         linearLayoutsContainer = (LinearLayout)findViewById(R.id.linearLayouts_container);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         for (animationIndex = 0; animationIndex < NUM_OF_COLS; animationIndex++) {
 
             animations[animationIndex] = ValueAnimator.ofFloat(initialHeight, screenHeight);
-            animations[animationIndex].setDuration(4000);
+            animations[animationIndex].setDuration(8000);
             animations[animationIndex].setStartDelay((long) (Math.random() * (2000)));
             animations[animationIndex].setRepeatCount(Animation.INFINITE);
             animations[animationIndex].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onAnimationUpdate(ValueAnimator updatedAnimation) {
 
                         float animatedValue = (float)updatedAnimation.getAnimatedValue();
-                    //Log.d("CHECK", " " + animatedValue + " and X is " + x);
+
                         enemies[x].setTranslationY(animatedValue);
                         enemies[x].setVisibility(View.VISIBLE);
                         if(isCollide(enemies[x])){
@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
                             updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
                             updatedAnimation.start();
                         }
-
                 }
             });
 
@@ -116,19 +115,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        numOfLife = 3;
+
+        for (int i = 0; i < NUM_OF_COLS ; i++) {
+            animations[i].end();
+        }
+    }
+
     private synchronized void reduceLife() {
 
         numOfLife--;
-        if(numOfLife >= 0){
-            life[numOfLife].setVisibility(View.INVISIBLE);
-        }
-        else {
+        life[numOfLife].setVisibility(View.INVISIBLE);
+
+        if(numOfLife == 0)
             endGame();
-        }
 
     }
 
     private void endGame() {
+        Intent intent = new Intent(this, GameOverScreen.class);
+        startActivity(intent);
     }
 
     private boolean isCollide(View enemy) {
@@ -139,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
         enemy.getLocationOnScreen(locationEnemy);
         player.getLocationOnScreen(locationPlayer);
 
-        Rect R1=new Rect((int)locationEnemy[0], (int)locationEnemy[1] , (int)(locationEnemy[0] + enemy.getWidth()), (int)(locationEnemy[1] + enemy.getHeight()));
-        Rect R2=new Rect((int)locationPlayer[0] + (player.getWidth() / 2) , (int)locationPlayer[1] + (player.getHeight() / 2), (int)(locationPlayer[0] + player.getWidth()) - (player.getWidth() / 2), (int)(locationPlayer[1] + player.getHeight()));
+        Rect R1=new Rect((int)locationEnemy[0] , (int)locationEnemy[1] + (enemy.getHeight() / 2) , (int)(locationEnemy[0] + enemy.getWidth()), (int)(locationEnemy[1] + enemy.getHeight()));
+        Rect R2=new Rect((int)(locationPlayer[0]) + (player.getWidth() / 5) , (int)(locationPlayer[1]) + (player.getHeight() / 2), (int)(locationPlayer[0] + player.getWidth()) - (player.getWidth() / 3), (int)(locationPlayer[1] + player.getHeight()));
 
         return R1.intersect(R2);
     }
