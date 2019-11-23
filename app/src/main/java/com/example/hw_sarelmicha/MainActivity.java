@@ -1,5 +1,5 @@
 package com.example.hw_sarelmicha;
-
+//Created by Mor Soferian and Sarel Micha
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.Point;
