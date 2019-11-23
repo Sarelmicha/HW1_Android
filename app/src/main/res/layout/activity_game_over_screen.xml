@@ -22,7 +22,6 @@
             android:gravity="center"
             android:textSize="50dp" />
 
-
         <Button
             android:fontFamily="monospace"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
@@ -64,8 +63,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:background="@drawable/deadturtle"/>
-
-
 
 </RelativeLayout>
 

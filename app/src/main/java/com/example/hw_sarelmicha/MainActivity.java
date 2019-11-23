@@ -14,16 +14,21 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private final int NUM_OF_COLS = 3;
     private int numOfLife = 3;
+    private int score = 0;
     private View[] enemies;
     private View[] life;
     private LinearLayout[] cols;
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private int screenHeight;
     private static int animationIndex;
     private MediaPlayer ouchSound;
+    private TextView scoreView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         leftScreen = (RelativeLayout)findViewById(R.id.left_screen);
         rightScreen = (RelativeLayout)findViewById(R.id.right_screen);
         ouchSound = MediaPlayer.create(this, R.raw.ouchsound);
+        scoreView = (TextView)findViewById(R.id.score);
 
         addClickListeners();
         addEnemies(NUM_OF_COLS);
@@ -107,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
                             updatedAnimation.start();
                             reduceLife();
                         }
-                        if(enemies[x].getY()  > screenHeight - 10){ //Enemy is Out of Screen
+                        else if(enemies[x].getY()  >= screenHeight - 1){ //Enemy is Out of Screen
+                            updateScore();
                             updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
                             updatedAnimation.start();
                         }
@@ -122,6 +130,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private synchronized void updateScore() {
+
+        score++;
+        scoreView.setText("Score:" + score);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -134,7 +148,14 @@ public class MainActivity extends AppCompatActivity {
 
     private synchronized void reduceLife() {
 
+        //Fade Out effect
+        Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator());
+        fadeOut.setStartOffset(0);
+        fadeOut.setDuration(500);
+
         numOfLife--;
+        life[numOfLife].setAnimation(fadeOut);
         life[numOfLife].setVisibility(View.INVISIBLE);
 
         if(numOfLife == 0)

@@ -5,4 +5,5 @@
     <string name="exit">Exit</string>
     <string name="main_menu">Main Menu</string>
     <string name="restart">Restart</string>
+    <string name="score">Score:0</string>
 </resources>
