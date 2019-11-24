@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addJellyfish() {
 
+        //
         jellyFish = new View(this);
         RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(150, 150);
         params.rightMargin = (int)(Math.random() * (((screenWidth - 50) - 50) + 1));
