@@ -3,9 +3,11 @@ package com.example.hw_sarelmicha;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -29,11 +31,17 @@ public class OpenScreen extends AppCompatActivity {
         startSoundtrack();
         addListenersButtons();
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 
     void startSoundtrack(){
         mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic);
+        mediaPlayer.setLooping(true);
         mediaPlayer.start();
     }
 
@@ -45,12 +53,19 @@ public class OpenScreen extends AppCompatActivity {
                 newGame();
             }
         });
+
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 exitGame();
             }
         });
+    }
+
+    private void resumeGame() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void newGame() {

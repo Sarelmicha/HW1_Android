@@ -86,6 +86,6 @@
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:background="@drawable/playerturtle" />
+        android:background="@drawable/playerleft" />
 
 </RelativeLayout>

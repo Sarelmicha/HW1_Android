@@ -1,13 +1,11 @@
 package com.example.hw_sarelmicha;
 //Created by Mor Soferian and Sarel Micha
 import android.animation.ValueAnimator;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,28 +20,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private final int NUM_OF_COLS = 3;
+    private final int NUM_OF_PICS = 3;
+    private final int MAX_ENEMIES = 2;
+    private final int MIN_ENEMIES = 0;
     private int numOfLife = 3;
     private int score = 0;
     private View[] enemies;
+    private int[] enemiesPics;
     private View[] life;
     private LinearLayout[] cols;
     private ValueAnimator[] animations;
@@ -64,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setScreenHeightAndWidth();
 
-
         mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
         linearLayoutsContainer = (LinearLayout) findViewById(R.id.linearLayouts_container);
         player = (View) findViewById(R.id.player);
@@ -73,23 +59,38 @@ public class MainActivity extends AppCompatActivity {
         ouchSound = MediaPlayer.create(this, R.raw.ouchsound);
         scoreView = (TextView) findViewById(R.id.score);
 
+
+
         addClickListeners();
+        addEnemiesPics();
         addEnemies(NUM_OF_COLS);
         addLife();
         setUpAnimations();
 
     }
 
-    private void setUpAnimations() {
-        animations = new ValueAnimator[NUM_OF_COLS];
+    private void addEnemiesPics() {
 
-        final float initialHeight = -100;
+        enemiesPics = new int[NUM_OF_PICS];
+        enemiesPics[0] = R.drawable.plastic;
+        enemiesPics[1]= R.drawable.plastic1;
+        enemiesPics[2]= R.drawable.plastic2;
+    }
+
+    private void setUpAnimations() {
+
+        final int MIN_DURATION = 4000;
+        final int MAX_DURATION = 9000;
+        final float initialHeight = -300;
+
+        animations = new ValueAnimator[NUM_OF_COLS];
+        
 
         for (animationIndex = 0; animationIndex < NUM_OF_COLS; animationIndex++) {
 
             animations[animationIndex] = ValueAnimator.ofFloat(initialHeight, screenHeight);
-            animations[animationIndex].setDuration(8000);
-            animations[animationIndex].setStartDelay((long) (Math.random() * (4000)));
+            animations[animationIndex].setDuration(MAX_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
+            animations[animationIndex].setStartDelay((long) (Math.random() * (MIN_DURATION)));
             animations[animationIndex].setRepeatCount(Animation.INFINITE);
             animations[animationIndex].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -109,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
                         reduceLife();
                     } else if (enemies[x].getY() >= screenHeight - 1) { //Enemy is Out of Screen
                         updateScore();
+                        updatedAnimation.setDuration(MIN_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
                         updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
+                        enemies[x].setBackgroundResource(enemiesPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
                         updatedAnimation.start();
                     }
                 }
@@ -167,6 +170,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(MainActivity.this, OpenScreen.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+    }
+
     private synchronized void reduceLife() {
 
         //Fade Out effect
@@ -217,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             enemies[i].setLayoutParams(new LinearLayout.LayoutParams(screenWidth / numOfCols, 250));
             addGravity(enemies[i], Gravity.TOP);
             enemies[i].setVisibility(View.INVISIBLE);
-            setViewBackground(enemies[i], R.drawable.plastic);
+            enemies[i].setBackgroundResource(enemiesPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
             cols[i].addView(enemies[i]);
             linearLayoutsContainer.addView(cols[i]);
         }
@@ -227,8 +238,11 @@ public class MainActivity extends AppCompatActivity {
         rightScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (player.getX() > 0)
+                if (player.getX() > 0){
                     player.setX(player.getX() - 50);
+                    player.setBackgroundResource(R.drawable.playerright);
+                }
+
 
             }
         });
@@ -236,9 +250,10 @@ public class MainActivity extends AppCompatActivity {
         leftScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (player.getX() < screenWidth - player.getWidth())
+                if (player.getX() < screenWidth - player.getWidth()){
                     player.setX(player.getX() + 50);
-
+                    player.setBackgroundResource(R.drawable.playerleft);
+                }
             }
         });
     }
@@ -251,10 +266,4 @@ public class MainActivity extends AppCompatActivity {
         }
         view.setLayoutParams(params); //causes layout update
     }
-
-    private void setViewBackground(View view, int draw) {
-        view.setBackgroundResource(draw);
-    }
 }
-
-

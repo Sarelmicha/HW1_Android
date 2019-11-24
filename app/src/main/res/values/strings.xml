@@ -6,4 +6,5 @@
     <string name="main_menu">Main Menu</string>
     <string name="restart">Restart</string>
     <string name="score">Score:0</string>
+    <string name="resume">Resume</string>
 </resources>

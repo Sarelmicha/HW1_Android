@@ -32,6 +32,8 @@ public class GameOverScreen extends AppCompatActivity {
         restart = (Button)findViewById(R.id.restart);
         exit = (Button)findViewById(R.id.exit);
 
+        addListenersButtons();
+
     }
 
     private void addListenersButtons(){
