@@ -6,6 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 
 public class GameOverScreen extends AppCompatActivity {
 
@@ -21,6 +31,10 @@ public class GameOverScreen extends AppCompatActivity {
         mainMenu = (Button)findViewById(R.id.main_menu);
         restart = (Button)findViewById(R.id.restart);
         exit = (Button)findViewById(R.id.exit);
+
+    }
+
+    private void addListenersButtons(){
 
         mainMenu.setOnClickListener(new View.OnClickListener() {
             @Override

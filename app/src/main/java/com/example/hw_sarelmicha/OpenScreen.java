@@ -14,35 +14,43 @@ import java.io.Serializable;
 public class OpenScreen extends AppCompatActivity {
 
     private Button newGameBtn;
-    private Button exit;
+    private Button exitBtn;
     private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_screen);
-        if(mediaPlayer == null){
-            mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic);
-            mediaPlayer.start();
-        }
+
+        //Initialize Buttons
+       newGameBtn = (Button)findViewById(R.id.newGameBtn);
+       exitBtn = (Button)findViewById(R.id.exitBtn);
+
+        startSoundtrack();
+        addListenersButtons();
 
 
-        newGameBtn = (Button)findViewById(R.id.newGameBtn);
+    }
+
+    void startSoundtrack(){
+        mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic);
+        mediaPlayer.start();
+    }
+
+    private void addListenersButtons(){
+
         newGameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 newGame();
             }
         });
-
-        exit = (Button)findViewById(R.id.exitBtn);
-       exit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               exitGame();
-           }
-       });
-
+        exitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitGame();
+            }
+        });
     }
 
     private void newGame() {
