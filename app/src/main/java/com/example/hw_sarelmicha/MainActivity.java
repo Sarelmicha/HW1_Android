@@ -27,7 +27,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int NUM_OF_COLS = 3;
+    private final int NUM_OF_COLS = 4;
     private final int NUM_OF_PICS = 3;
     private final int MAX_ENEMIES = 2;
     private final int MIN_ENEMIES = 0;
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer ouchSound;
     private MediaPlayer biteSound;
     private TextView scoreView;
+    private boolean makeJelly = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,25 +82,32 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        handler.postDelayed(new Runnable() {
+        makeJelly = true;
+        final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
+
+        final Runnable createJellyfish = new Runnable() {
             @Override
             public void run() {
-                //Do something after 100ms
-              addJellyfish();
-                handler.postDelayed(this, 30000);
+                if(makeJelly){
+                    addJellyfish();
+                    handler.postDelayed(this, DELAY_TIME);
+                }
             }
-        }, 30000);
+        };
+
+        //trigger first time
+        handler.postDelayed(createJellyfish,DELAY_TIME);
 
         super.onResume();
         for (int i = 0; i < NUM_OF_COLS; i++) {
             animations[i].resume();
         }
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        makeJelly = false;
 
         for (int i = 0; i < NUM_OF_COLS; i++) {
             animations[i].pause();
@@ -108,10 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void addJellyfish() {
 
-        //
         jellyFish = new View(this);
-        RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(150, 150);
-        params.rightMargin = (int)(Math.random() * (((screenWidth - 50) - 50) + 1));
+        RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(200, 200);
+        params.rightMargin = (int)(Math.random() * (((screenWidth - 100) - 100) + 1));
         params.bottomMargin = 60;
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         jellyFish.setLayoutParams(params);
