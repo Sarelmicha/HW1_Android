@@ -53,7 +53,7 @@ public class OpenScreen extends AppCompatActivity {
         Log.d("CHECK", "onPause:im on stop now! ");
         if(!isNewGameOccurred) {
             mediaPlayer.pause();
-        } 
+        }
 
         super.onStop();
     }

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private View jellyFish;
     private LinearLayout[] cols;
     private ValueAnimator[] animations;
+    private ValueAnimator jellyCounter;
     private Handler handler;
     private RelativeLayout mainLayout;
     private RelativeLayout leftScreen;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         addEnemiesPics();
         addEnemies(NUM_OF_COLS);
         addLife();
-        setUpEnemiesAnimations();
+        setUpAnimations();
 
 
     }
@@ -114,7 +115,16 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < NUM_OF_COLS; i++) {
             animations[i].pause();
         }
+    }
 
+    private void setJellyCounter(){
+
+        final int timeToLive = 10 * 1000; //10 seconds for jelly to live
+
+        jellyCounter = new ValueAnimator();
+        jellyCounter = ValueAnimator.ofFloat(0, 1);
+        jellyCounter.setDuration(timeToLive);
+        jellyCounter.start();
     }
 
 
@@ -130,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
         jellyFish.setAnimation(fadeInEffect());
 
         mainLayout.addView(jellyFish);
+        setJellyCounter();
+
     }
 
     private void addEnemiesPics() {
@@ -140,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         enemiesPics[2]= R.drawable.plastic2;
     }
 
-    private void setUpEnemiesAnimations() {
+    private void setUpAnimations() {
 
         animations = new ValueAnimator[NUM_OF_COLS];
 
@@ -161,6 +173,14 @@ public class MainActivity extends AppCompatActivity {
                         collideWithEnemyOccurred(updatedAnimation);
                     } else if (isOutOfHeightScreen(enemies[x])) {
                         enemyIsOutOfScreen(updatedAnimation,x);
+                    }
+                    if(jellyFish != null){
+                        if((float)jellyCounter.getAnimatedValue() > 0.5) {
+                            jellyFish.setAnimation(fadeOutEffect());
+                            jellyFish.setVisibility(View.INVISIBLE);
+                            jellyFish = null;
+                            jellyCounter.end();
+                        }
                     }
                 }
             });
@@ -343,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addClickListeners() {
+
         rightScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
