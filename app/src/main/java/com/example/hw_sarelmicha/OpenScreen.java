@@ -18,6 +18,7 @@ public class OpenScreen extends AppCompatActivity {
     private Button newGameBtn;
     private Button exitBtn;
     private MediaPlayer mediaPlayer;
+    private boolean isNewGameOccurred = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +35,35 @@ public class OpenScreen extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
+    protected void onPause() {
+        Log.d("CHECK", "onPause:im on pause now! ");
+        super.onPause();
     }
+
+    @Override
+    protected void onResume() {
+        Log.d("CHECK", "onPause:im on resume now! ");
+        isNewGameOccurred = false;
+        mediaPlayer.start();
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d("CHECK", "onPause:im on stop now! ");
+        if(!isNewGameOccurred) {
+            mediaPlayer.pause();
+        } 
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("CHECK", "onPause:im on desttory now! ");
+        super.onDestroy();
+    }
+
 
     void startSoundtrack(){
         mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic);
@@ -70,11 +96,11 @@ public class OpenScreen extends AppCompatActivity {
 
     private void newGame() {
         Intent intent = new Intent(this, MainActivity.class);
+        isNewGameOccurred = true;
         startActivity(intent);
     }
 
     public static void exitGame() {
         System.exit(0);
-
     }
 }

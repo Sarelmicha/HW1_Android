@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer ouchSound;
     private MediaPlayer biteSound;
     private TextView scoreView;
+    private MediaPlayer mediaPlayer;
     private boolean makeJelly = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
 
         makeJelly = true;
         final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
@@ -98,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         //trigger first time
         handler.postDelayed(createJellyfish,DELAY_TIME);
 
-        super.onResume();
         for (int i = 0; i < NUM_OF_COLS; i++) {
             animations[i].resume();
         }
@@ -112,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < NUM_OF_COLS; i++) {
             animations[i].pause();
         }
+
     }
+
 
     private void addJellyfish() {
 
