@@ -21,18 +21,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-
 public class MainActivity extends AppCompatActivity {
 
     private final int NUM_OF_COLS = 4;
     private final int NUM_OF_PICS = 3;
     private final int MAX_ENEMIES = 2;
     private final int MIN_ENEMIES = 0;
-    final int MIN_DURATION = 4000;
-    final int MAX_DURATION = 9000;
+    final int MIN_DURATION = 3000;
+    final int MAX_DURATION = 7000;
     private int numOfLife = 3;
     private int score = 0;
     private View[] enemies;
@@ -57,29 +53,17 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private boolean makeJelly = true;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setScreenHeightAndWidth();
-
-        mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
-        linearLayoutsContainer = (LinearLayout) findViewById(R.id.linearLayouts_container);
-        player = (View) findViewById(R.id.player);
-        leftScreen = (RelativeLayout) findViewById(R.id.left_screen);
-        rightScreen = (RelativeLayout) findViewById(R.id.right_screen);
-        ouchSound = MediaPlayer.create(this, R.raw.ouchsound);
-        biteSound = MediaPlayer.create(this, R.raw.bite);
-        scoreView = (TextView) findViewById(R.id.score);
-        handler = new Handler();
+        getIds();
         addClickListeners();
         addEnemiesPics();
         addEnemies(NUM_OF_COLS);
         addLife();
         setUpAnimations();
-
-
     }
 
     @Override
@@ -99,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
         //trigger first time
         handler.postDelayed(createJellyfish,DELAY_TIME);
 
@@ -121,6 +104,18 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    private void getIds(){
+
+        mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
+        linearLayoutsContainer = (LinearLayout) findViewById(R.id.linearLayouts_container);
+        player = (View) findViewById(R.id.player);
+        leftScreen = (RelativeLayout) findViewById(R.id.left_screen);
+        rightScreen = (RelativeLayout) findViewById(R.id.right_screen);
+        ouchSound = MediaPlayer.create(this, R.raw.ouchsound);
+        biteSound = MediaPlayer.create(this, R.raw.bite);
+        scoreView = (TextView) findViewById(R.id.score);
+        handler = new Handler();
+    }
 
     private void setJellyCounter(){
 
@@ -131,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         jellyCounter.setDuration(timeToLive);
         jellyCounter.start();
     }
-
 
     private void addJellyfish() {
 
@@ -278,8 +272,6 @@ public class MainActivity extends AppCompatActivity {
         scoreView.setText("Score:" + score);
     }
 
-
-
     private synchronized void reduceLife() {
 
         Animation fadeOut = fadeOutEffect();
@@ -290,7 +282,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (numOfLife == 0)
             endGame();
-
     }
 
     private Animation fadeInEffect(){
@@ -329,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void endGame() {
         Intent intent = new Intent(this, GameOverScreen.class);
+        intent.putExtra("score",score);
         startActivity(intent);
         finish();
     }
@@ -378,7 +370,6 @@ public class MainActivity extends AppCompatActivity {
                         if(isCollide(jellyFish))
                             collideWithJellyfishOccurred();
                     }
-
                 }
             }
         });
@@ -397,7 +388,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void addGravity(View view, int... gravity) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
 

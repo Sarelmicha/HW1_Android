@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,6 +25,7 @@ public class GameOverScreen extends AppCompatActivity {
     private Button mainMenu;
     private Button restart;
     private Button exit;
+    private TextView score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,10 @@ public class GameOverScreen extends AppCompatActivity {
         mainMenu = (Button)findViewById(R.id.main_menu);
         restart = (Button)findViewById(R.id.restart);
         exit = (Button)findViewById(R.id.exit);
+        score = (TextView)findViewById(R.id.score);
+
+        Bundle scoreData = getIntent().getExtras();
+        score.setText(score.getText().toString() + scoreData.getInt("score"));
 
         addListenersButtons();
 
