@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+            OpenScreen.mediaPlayer.start();
 
         makeJelly = true;
         final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
@@ -109,13 +110,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
+            OpenScreen.mediaPlayer.pause();
+
         makeJelly = false;
 
         for (int i = 0; i < NUM_OF_COLS; i++) {
             animations[i].pause();
         }
+
+        super.onPause();
     }
+
 
     private void setJellyCounter(){
 
@@ -169,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
                     enemies[x].setTranslationY(animatedValue);
                     enemies[x].setVisibility(View.VISIBLE);
+
                     if (isCollide(enemies[x])) {
                         collideWithEnemyOccurred(updatedAnimation);
                     } else if (isOutOfHeightScreen(enemies[x])) {
@@ -176,10 +182,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if(jellyFish != null){
                         if((float)jellyCounter.getAnimatedValue() > 0.5) {
-                            jellyFish.setAnimation(fadeOutEffect());
-                            jellyFish.setVisibility(View.INVISIBLE);
-                            jellyFish = null;
-                            jellyCounter.end();
+                            makeJellyDisappeared();
                         }
                     }
                 }
@@ -187,6 +190,13 @@ public class MainActivity extends AppCompatActivity {
 
             animations[animationIndex].start();
         }
+    }
+
+    private void makeJellyDisappeared(){
+        jellyFish.setAnimation(fadeOutEffect());
+        jellyFish.setVisibility(View.INVISIBLE);
+        jellyFish = null;
+        jellyCounter.end();
     }
 
     private void setAnimationParameters(){
@@ -268,13 +278,7 @@ public class MainActivity extends AppCompatActivity {
         scoreView.setText("Score:" + score);
     }
 
-    @Override
-    public void onBackPressed() {
 
-        Intent intent = new Intent(MainActivity.this, OpenScreen.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-    }
 
     private synchronized void reduceLife() {
 

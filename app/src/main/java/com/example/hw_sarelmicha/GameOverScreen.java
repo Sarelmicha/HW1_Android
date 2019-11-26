@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,6 +36,21 @@ public class GameOverScreen extends AppCompatActivity {
         addListenersButtons();
 
     }
+
+    @Override
+    protected void onPause() {
+        Log.d("CHECK", "onPause:im on pause now! ");
+            OpenScreen.mediaPlayer.pause();;
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("CHECK", "onPause:im on resume now! ");
+            OpenScreen.mediaPlayer.start();
+        super.onResume();
+    }
+
 
     private void addListenersButtons(){
 
