@@ -23,8 +23,9 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int NUM_OF_COLS = 4;
+    private final int NUM_OF_COLS = 3;
     private final int NUM_OF_PICS = 3;
+    private final int STEP = 80;
     private final int MAX_ENEMIES = 2;
     private final int MIN_ENEMIES = 0;
     final int MIN_DURATION = 3000;
@@ -364,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (player.getX() > 0){
-                    player.setX(player.getX() - 50);
+                    player.setX(player.getX() - STEP);
                     player.setBackgroundResource(R.drawable.playerright);
                     if(jellyFish != null){
                         if(isCollide(jellyFish))
@@ -378,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (player.getX() < screenWidth - player.getWidth()){
-                    player.setX(player.getX() + 50);
+                    player.setX(player.getX() + STEP);
                     player.setBackgroundResource(R.drawable.playerleft);
                     if(jellyFish != null){
                         if(isCollide(jellyFish))
