@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setScreenHeightAndWidth();
-        getIds();
+        setIds();
         addClickListeners();
         addEnemiesPics();
         addEnemies(NUM_OF_COLS);
@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
+        final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
             OpenScreen.mediaPlayer.start();
 
         makeJelly = true;
-        final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
+
 
         final Runnable createJellyfish = new Runnable() {
             @Override
@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < NUM_OF_COLS; i++) {
             animations[i].resume();
         }
+
+        super.onResume();
     }
 
     @Override
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private void getIds(){
+    private void setIds(){
 
         mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
         linearLayoutsContainer = (LinearLayout) findViewById(R.id.linearLayouts_container);
@@ -241,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void makeOuchSound() {
+        ouchSound.setVolume(0, 0.5f);
         ouchSound.start();
     }
 

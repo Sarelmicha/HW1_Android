@@ -23,11 +23,7 @@ public class OpenScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_screen);
-
-        //Initialize Buttons
-       newGameBtn = (Button)findViewById(R.id.newGameBtn);
-       exitBtn = (Button)findViewById(R.id.exitBtn);
-
+        setIds();
         startSoundtrack();
         addListenersButtons();
     }
@@ -43,8 +39,14 @@ public class OpenScreen extends AppCompatActivity {
         mediaPlayer.start();
          super.onResume();
     }
+    private void setIds(){
 
-    void startSoundtrack(){
+        //Initialize Buttons
+        newGameBtn = (Button)findViewById(R.id.newGameBtn);
+        exitBtn = (Button)findViewById(R.id.exitBtn);
+    }
+
+    private void startSoundtrack(){
         mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();

@@ -31,31 +31,30 @@ public class GameOverScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over_screen);
-
-        mainMenu = (Button)findViewById(R.id.main_menu);
-        restart = (Button)findViewById(R.id.restart);
-        exit = (Button)findViewById(R.id.exit);
-        score = (TextView)findViewById(R.id.score);
-
+        setIds();
         Bundle scoreData = getIntent().getExtras();
         score.setText(score.getText().toString() + scoreData.getInt("score"));
-
         addListenersButtons();
-
     }
 
     @Override
     protected void onPause() {
-        Log.d("CHECK", "onPause:im on pause now! ");
             OpenScreen.mediaPlayer.pause();;
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        Log.d("CHECK", "onPause:im on resume now! ");
             OpenScreen.mediaPlayer.start();
         super.onResume();
+    }
+
+    private void setIds(){
+
+        mainMenu = (Button)findViewById(R.id.main_menu);
+        restart = (Button)findViewById(R.id.restart);
+        exit = (Button)findViewById(R.id.exit);
+        score = (TextView)findViewById(R.id.score);
     }
 
 
