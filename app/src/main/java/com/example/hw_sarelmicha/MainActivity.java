@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void makeOuchSound() {
-        ouchSound.setVolume(0, 0.5f);
+        ouchSound.setVolume(0, 0.7f);
         ouchSound.start();
     }
 
