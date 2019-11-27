@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer ouchSound;
     private MediaPlayer biteSound;
     private TextView scoreView;
-    private MediaPlayer mediaPlayer;
     private boolean makeJelly = true;
 
     @Override
@@ -252,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
         biteSound.start();
 
     }
+
     private void addLife() {
         life = new View[numOfLife];
 
