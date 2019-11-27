@@ -24,6 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Planet Saver "
+            android:shadowColor="#B0000000"
+            android:shadowDy="10"
+            android:shadowRadius="10"
             android:textColor="#FFFFFF"
             android:textSize="50dp" />
 
@@ -35,6 +38,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_game"
+            android:shadowColor="#B0000000"
+            android:shadowDy="10"
+            android:shadowRadius="10"
             android:textColor="#FFFFFF"
             android:gravity="center"
             android:textSize="20dp" />
@@ -47,6 +53,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/exit"
+            android:shadowColor="#B0000000"
+            android:shadowDy="10"
+            android:shadowRadius="10"
             android:textColor="#FFFFFF"
             android:gravity="center"
             android:textSize="20dp" />
