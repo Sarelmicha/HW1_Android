@@ -1,5 +1,6 @@
-package com.example.hw_sarelmicha;
 //Created by Mor Soferian and Sarel Micha
+package com.example.hw_sarelmicha;
+
 import android.animation.ValueAnimator;
 import android.app.PendingIntent;
 import android.content.Intent;
