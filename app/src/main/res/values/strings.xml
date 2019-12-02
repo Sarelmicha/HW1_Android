@@ -7,4 +7,5 @@
     <string name="restart">Restart</string>
     <string name="score">Score:0</string>
     <string name="resume">Resume</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
-            OpenScreen.mediaPlayer.start();
+        OpenScreen.mediaPlayer.start();
 
         makeJelly = true;
 
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-            OpenScreen.mediaPlayer.pause();
+        OpenScreen.mediaPlayer.pause();
 
         makeJelly = false;
 
@@ -237,8 +237,8 @@ public class MainActivity extends AppCompatActivity {
     private void collideWithJellyfishOccurred(){
 
         jellyFish.setVisibility(View.INVISIBLE);
-       jellyFish = null;
-       makeBiteSound();
+        jellyFish = null;
+        makeBiteSound();
         deduceLife();
     }
 
