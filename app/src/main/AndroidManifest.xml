@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Difficulty"
+            android:label="@string/title_activity_difficulty"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GameOverScreen" />
         <activity android:name=".OpenScreen">
             <intent-filter>

@@ -8,4 +8,8 @@
     <string name="score">Score:0</string>
     <string name="resume">Resume</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_difficulty">Difficulty</string>
+    <string name="easy">easy</string>
+    <string name="hard">hard</string>
+    <string name="expert">expert</string>
 </resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Difficulty"
+    android:background="@drawable/background" >
+
+    <LinearLayout
+        android:id="@+id/btn_continer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/choose_diff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="CHOOSE DIFFICULTY"
+            android:textStyle="bold"
+            android:layout_gravity="top|center"
+            android:padding="30dp"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"/>
+
+        <Button
+            android:fontFamily="monospace"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:id="@+id/easy_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/easy"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textSize="20dp" />
+
+        <Button
+            android:fontFamily="monospace"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:id="@+id/hard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hard"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textSize="20dp" />
+
+        <Button
+            android:fontFamily="monospace"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:id="@+id/expert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/expert"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+
+

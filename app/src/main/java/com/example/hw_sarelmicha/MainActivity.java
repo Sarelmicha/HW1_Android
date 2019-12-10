@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
@@ -24,13 +25,13 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int NUM_OF_COLS = 3;
+    private final int NUM_OF_COLS = 5;
     private final int NUM_OF_PICS = 3;
-    private final int STEP = 80;
+    private final int STEP = 100;
     private final int MAX_ENEMIES = 2;
     private final int MIN_ENEMIES = 0;
     final int MIN_DURATION = 3000;
-    final int MAX_DURATION = 7000;
+    final int MAX_DURATION = 5000;
     private int numOfLife = 3;
     private int score = 0;
     private View[] enemies;
@@ -249,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeBiteSound(){
         biteSound.start();
-
     }
 
     private void addLife() {
@@ -363,35 +363,68 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    public void movePlayerRight(){
+
+        if (player.getX() > 0) {
+            player.setX(player.getX() - STEP);
+            player.setBackgroundResource(R.drawable.playerright);
+            if (jellyFish != null) {
+                if (isCollide(jellyFish))
+                    collideWithJellyfishOccurred();
+            }
+        }
+    }
+
+    public void movePlayerLeft(){
+
+        if (player.getX() < screenWidth - player.getWidth()){
+            player.setX(player.getX() + STEP);
+            player.setBackgroundResource(R.drawable.playerleft);
+            if(jellyFish != null){
+                if(isCollide(jellyFish))
+                    collideWithJellyfishOccurred();
+            }
+        }
+    }
+
     private void addClickListeners() {
+
+//        rightScreen.setOnTouchListener(new View.OnTouchListener(){
+//
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//
+//                   movePlayerRight();
+//
+//                return true;
+//            }
+//        });
+//
+//        leftScreen.setOnTouchListener(new View.OnTouchListener(){
+//
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//              movePlayerLeft();
+//                return true;
+//            }
+//        });
+
 
         rightScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (player.getX() > 0){
-                    player.setX(player.getX() - STEP);
-                    player.setBackgroundResource(R.drawable.playerright);
-                    if(jellyFish != null){
-                        if(isCollide(jellyFish))
-                            collideWithJellyfishOccurred();
-                    }
-                }
+               movePlayerRight();
             }
         });
 
         leftScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (player.getX() < screenWidth - player.getWidth()){
-                    player.setX(player.getX() + STEP);
-                    player.setBackgroundResource(R.drawable.playerleft);
-                    if(jellyFish != null){
-                        if(isCollide(jellyFish))
-                            collideWithJellyfishOccurred();
-                    }
-                }
+               movePlayerLeft();
             }
         });
+
     }
     private void addGravity(View view, int... gravity) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
