@@ -66,7 +66,7 @@ public class OpenScreen extends AppCompatActivity {
 
 
     private void newGame() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Difficulty.class);
         startActivity(intent);
     }
 

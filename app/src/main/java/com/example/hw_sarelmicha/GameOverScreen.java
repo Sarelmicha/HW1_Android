@@ -3,6 +3,7 @@ package com.example.hw_sarelmicha;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,14 +14,16 @@ public class GameOverScreen extends AppCompatActivity {
     private Button restart;
     private Button exit;
     private TextView score;
+    private int mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over_screen);
         setIds();
-        Bundle scoreData = getIntent().getExtras();
-        score.setText(score.getText().toString() + scoreData.getInt("score"));
+        Bundle data = getIntent().getExtras();
+        score.setText(score.getText().toString() + data.getInt("score"));
+        mode = data.getInt("difficulty");
         addListenersButtons();
     }
 
@@ -72,6 +75,7 @@ public class GameOverScreen extends AppCompatActivity {
 
     private void restartGame() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("difficulty",mode);
         startActivity(intent);
         finish();
     }

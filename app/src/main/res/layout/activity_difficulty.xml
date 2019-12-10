@@ -24,7 +24,7 @@
             android:layout_gravity="top|center"
             android:padding="30dp"
             android:textColor="#FFFFFF"
-            android:textSize="20dp"/>
+            android:textSize="25dp"/>
 
         <Button
             android:fontFamily="monospace"
@@ -33,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/easy"
+            android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:gravity="center"
             android:textSize="20dp" />
@@ -40,10 +41,11 @@
         <Button
             android:fontFamily="monospace"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:id="@+id/hard"
+            android:id="@+id/hard_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hard"
+            android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:gravity="center"
             android:textSize="20dp" />
@@ -51,10 +53,11 @@
         <Button
             android:fontFamily="monospace"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:id="@+id/expert"
+            android:id="@+id/expert_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/expert"
+            android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:gravity="center"
             android:textSize="20dp" />

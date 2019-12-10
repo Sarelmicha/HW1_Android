@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int NUM_OF_COLS = 5;
+    private int NUM_OF_COLS;
     private final int NUM_OF_PICS = 3;
     private final int STEP = 100;
     private final int MAX_ENEMIES = 2;
@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Get Mode from user
+        Bundle modeData = getIntent().getExtras();
+        NUM_OF_COLS = modeData.getInt("difficulty");
         setScreenHeightAndWidth();
         setIds();
         addClickListeners();
@@ -214,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isOutOfHeightScreen(View view){
-        if(view.getY() >= screenHeight - 1)
+        if(view.getY() >= screenHeight - 20)
             return true;
         return false;
     }
@@ -326,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
     private void endGame() {
         Intent intent = new Intent(this, GameOverScreen.class);
         intent.putExtra("score",score);
+        intent.putExtra("difficulty",NUM_OF_COLS);
         startActivity(intent);
         finish();
     }
