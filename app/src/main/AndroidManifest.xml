@@ -8,20 +8,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/planetsaver_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         >
         <activity
-
             android:name=".Difficulty"
-            android:label="@string/title_activity_difficulty"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_difficulty"></activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_main" />
         <activity android:name=".GameOverScreen"
-            android:label="GameOverScreen"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="GameOverScreen" />
         <activity android:name=".OpenScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

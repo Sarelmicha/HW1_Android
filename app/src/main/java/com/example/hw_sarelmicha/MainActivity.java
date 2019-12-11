@@ -2,6 +2,7 @@
 package com.example.hw_sarelmicha;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Point;
@@ -23,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private int NUM_OF_COLS;
     private final int NUM_OF_PICS = 3;
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
         final float initialHeight = -300;
 
-        animations[animationIndex] = ValueAnimator.ofFloat(initialHeight, screenHeight);
+        animations[animationIndex] = ValueAnimator.ofFloat(initialHeight, screenHeight + 10);
         animations[animationIndex].setDuration(MAX_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
         animations[animationIndex].setStartDelay((long) (Math.random() * (MIN_DURATION)));
         animations[animationIndex].setRepeatCount(Animation.INFINITE);
