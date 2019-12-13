@@ -205,7 +205,7 @@ public class MainActivity extends Activity {
 
         final float initialHeight = -300;
 
-        animations[animationIndex] = ValueAnimator.ofFloat(initialHeight, screenHeight + 10);
+        animations[animationIndex] = ValueAnimator.ofFloat(initialHeight, screenHeight + 20);
         animations[animationIndex].setDuration(MAX_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
         animations[animationIndex].setStartDelay((long) (Math.random() * (MIN_DURATION)));
         animations[animationIndex].setRepeatCount(Animation.INFINITE);
