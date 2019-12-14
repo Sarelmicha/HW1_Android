@@ -15,14 +15,18 @@
 
         <activity
             android:name=".Difficulty"
-            android:label="@string/title_activity_difficulty"></activity>
+            android:label="@string/title_activity_difficulty"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_main" />
         <activity android:name=".GameOverScreen"
-            android:label="GameOverScreen" />
-        <activity android:name=".OpenScreen">
+            android:label="GameOverScreen"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".OpenScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

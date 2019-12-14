@@ -11,8 +11,7 @@ import android.util.Log;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class HighScore extends AppCompatActivity {
-
+public class HighScore {
 
     private final String ALL_PLAYERS = "Players";
     private SharedPreferences sharedPreferences;

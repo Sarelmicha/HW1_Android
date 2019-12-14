@@ -454,12 +454,33 @@ public class MainActivity extends Activity implements SensorEventListener {
             if ((player.getY() < screenHeight - player.getHeight() || (int) sensorEvent.values[1] < 0)
                     && (player.getY() > 0 || (int) sensorEvent.values[1] > 0 )){
                 if((int) sensorEvent.values[1] > 0){
-                    player.setY(player.getY() + (int) sensorEvent.values[1] + 8);
+                    //Move down
+                    moveDownWithSensors(sensorEvent);
                 } else {
-                    player.setY(player.getY() + (int) sensorEvent.values[1] - 8);
+                    //Move up
+                    moveUpWithSensors(sensorEvent);
                 }
             }
         }
+    }
+
+    public void moveUpWithSensors(SensorEvent sensorEvent){
+
+        if(sensorEvent.values[0] > 0) // move right and up
+            player.setBackgroundResource(R.drawable.rightup);
+        else
+            player.setBackgroundResource(R.drawable.leftup);
+
+        player.setY(player.getY() + (int) sensorEvent.values[1] - 8);
+    }
+
+    public void moveDownWithSensors(SensorEvent sensorEvent){
+        if(sensorEvent.values[0] > 0) // move right and down
+            player.setBackgroundResource(R.drawable.rightdown);
+         else
+            player.setBackgroundResource(R.drawable.leftdown);
+
+        player.setY(player.getY() + (int) sensorEvent.values[1] + 8);
     }
 
     public void moveLeftWithSensors(SensorEvent sensorEvent){
