@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.hw_sarelmicha">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/planetsaver_launcher"
@@ -10,11 +12,13 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         >
+
         <activity
             android:name=".Difficulty"
             android:label="@string/title_activity_difficulty"></activity>
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_main" />
         <activity android:name=".GameOverScreen"
             android:label="GameOverScreen" />

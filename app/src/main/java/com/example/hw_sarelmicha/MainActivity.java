@@ -4,9 +4,14 @@ package com.example.hw_sarelmicha;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SensorEventListener {
 
     private int NUM_OF_COLS;
     private final int NUM_OF_PICS = 3;
@@ -55,6 +60,9 @@ public class MainActivity extends Activity {
     private MediaPlayer biteSound;
     private TextView scoreView;
     private boolean makeJelly = true;
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +78,17 @@ public class MainActivity extends Activity {
         addEnemies(NUM_OF_COLS);
         addLife();
         setUpAnimations();
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_GAME);
+
     }
 
     @Override
     protected void onResume() {
         final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         OpenScreen.mediaPlayer.start();
 
         makeJelly = true;
@@ -102,6 +116,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         OpenScreen.mediaPlayer.pause();
+        sensorManager.unregisterListener(this);
 
         makeJelly = false;
 
@@ -395,27 +410,6 @@ public class MainActivity extends Activity {
 
     private void addClickListeners() {
 
-//        rightScreen.setOnTouchListener(new View.OnTouchListener(){
-//
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//
-//                   movePlayerRight();
-//
-//                return true;
-//            }
-//        });
-//
-//        leftScreen.setOnTouchListener(new View.OnTouchListener(){
-//
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//              movePlayerLeft();
-//                return true;
-//            }
-//        });
-
-
         rightScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -438,5 +432,49 @@ public class MainActivity extends Activity {
             params.gravity = x;
         }
         view.setLayoutParams(params); //causes layout update
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            if ((player.getX() < screenWidth - player.getWidth() || (int) sensorEvent.values[0] > 0)
+                    && (player.getX() > 0 || (int) sensorEvent.values[0] < 0 )) {
+                if((int) sensorEvent.values[0] <= 0){
+                  moveLeftWithSensors(sensorEvent);
+                } else {
+                    moveRightWithSensors(sensorEvent);
+                }
+                //Coliide Jellyfish
+                if(jellyFish != null){
+                    if(isCollide(jellyFish))
+                        collideWithJellyfishOccurred();
+                }
+            }
+            //Move Up and Down
+            if ((player.getY() < screenHeight - player.getHeight() || (int) sensorEvent.values[1] < 0)
+                    && (player.getY() > 0 || (int) sensorEvent.values[1] > 0 )){
+                if((int) sensorEvent.values[1] > 0){
+                    player.setY(player.getY() + (int) sensorEvent.values[1] + 8);
+                } else {
+                    player.setY(player.getY() + (int) sensorEvent.values[1] - 8);
+                }
+            }
+        }
+    }
+
+    public void moveLeftWithSensors(SensorEvent sensorEvent){
+        player.setBackgroundResource(R.drawable.playerleft);
+        player.setX((player.getX() - (int) sensorEvent.values[0] + 10));
+    }
+
+    public void moveRightWithSensors(SensorEvent sensorEvent){
+
+        player.setBackgroundResource(R.drawable.playerright);
+        player.setX((player.getX() - (int) sensorEvent.values[0] - 10));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 }

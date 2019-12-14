@@ -2,6 +2,7 @@ package com.example.hw_sarelmicha;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ public class GameOverScreen extends Activity {
     private TextView score;
     private int mode;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +28,9 @@ public class GameOverScreen extends Activity {
         score.setText(score.getText().toString() + data.getInt("score"));
         mode = data.getInt("difficulty");
         addListenersButtons();
+
+
+
     }
 
     @Override
