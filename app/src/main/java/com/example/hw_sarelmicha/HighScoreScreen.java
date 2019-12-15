@@ -59,7 +59,7 @@ public class HighScoreScreen extends AppCompatActivity implements  HighScoreVari
 
         for (int i = 0; i < allPlayersList.size() ; i++) {
             allHighScores[i] = new TextView(this);
-            allHighScores[i].setText(String.format("#%-1d :%-10s %-5d", i+ 1,allPlayersList.get(i).getName(),allPlayersList.get(i).getScore()));
+            allHighScores[i].setText(String.format("#%d:%-10s %-5d", i+ 1,allPlayersList.get(i).getName(),allPlayersList.get(i).getScore()));
             allHighScores[i].setTextSize(20);
             allHighScores[i].setTextColor(Color.WHITE);
         }

@@ -30,7 +30,6 @@ public class HighScore implements HighScoreVariables {
     public void readScores(){
 
         String jsonString = sharedPreferences.getString(ALL_PLAYERS, null);
-        Log.d("check", "json = : " + jsonString);
         if (jsonString != null) {
             // Option A:
             Gson gson = new Gson();
