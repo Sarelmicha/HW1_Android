@@ -62,15 +62,16 @@ public class MainActivity extends Activity implements SensorEventListener {
     private boolean makeJelly = true;
     private SensorManager sensorManager;
     private Sensor accelerometer;
-
+    private Player playerObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Get Mode from user
-        Bundle modeData = getIntent().getExtras();
-        NUM_OF_COLS = modeData.getInt("difficulty");
+        Bundle data = getIntent().getExtras();
+        NUM_OF_COLS = data.getInt("difficulty");
+        playerObject = new Player(data.getString("name"),score,0,0);
         setScreenHeightAndWidth();
         setIds();
         addClickListeners();
@@ -82,7 +83,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_GAME);
-
     }
 
     @Override
@@ -343,9 +343,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     private void endGame() {
+        //set player score before sending it to gameOverScreen
+        playerObject.setScore(score);
         Intent intent = new Intent(this, GameOverScreen.class);
-        intent.putExtra("score",score);
         intent.putExtra("difficulty",NUM_OF_COLS);
+        intent.putExtra("player",playerObject);
         startActivity(intent);
         finish();
     }
@@ -471,7 +473,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         else
             player.setBackgroundResource(R.drawable.leftup);
 
-        player.setY(player.getY() + (int) sensorEvent.values[1] - 8);
+        player.setY(player.getY() + (int) sensorEvent.values[1] - 10);
     }
 
     public void moveDownWithSensors(SensorEvent sensorEvent){
@@ -480,7 +482,7 @@ public class MainActivity extends Activity implements SensorEventListener {
          else
             player.setBackgroundResource(R.drawable.leftdown);
 
-        player.setY(player.getY() + (int) sensorEvent.values[1] + 8);
+        player.setY(player.getY() + (int) sensorEvent.values[1] + 10);
     }
 
     public void moveLeftWithSensors(SensorEvent sensorEvent){

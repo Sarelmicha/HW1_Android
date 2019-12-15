@@ -2,23 +2,20 @@ package com.example.hw_sarelmicha;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.gson.Gson;
 
-
-public class OpenScreen extends Activity {
+public class OpenScreen extends Activity implements HighScoreVariables {
 
     private Button newGameBtn;
     private Button exitBtn;
+    private Button highScoreBtn;
     private HighScore highScore;
     public static MediaPlayer mediaPlayer;
-    private final String SCORE_FILE =  "Scores";
+
 
 
     @Override
@@ -28,23 +25,9 @@ public class OpenScreen extends Activity {
         setIds();
         startSoundtrack();
         addListenersButtons();
+        highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
 
-
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE);
-        highScore = new HighScore(sharedPreferences);
-
-        Player p1 = new Player("mor", 100, "1", "1");
-        highScore.addPlayer(p1);
-        highScore.showAllPlayers();
-        Player p2 = new Player("srul", 100, "1", "1");
-        highScore.addPlayer(p2);
-        highScore.writeScore();
-        highScore.readScores();
-        highScore.showAllPlayers();
     }
-
-
-
 
     @Override
     protected void onPause() {
@@ -55,7 +38,9 @@ public class OpenScreen extends Activity {
     @Override
     protected void onResume() {
         mediaPlayer.start();
-         super.onResume();
+        highScore.readScores();
+        //highScore.showAllPlayers();
+        super.onResume();
 
     }
     private void setIds(){
@@ -63,6 +48,7 @@ public class OpenScreen extends Activity {
         //Initialize Buttons
         newGameBtn = (Button)findViewById(R.id.newGameBtn);
         exitBtn = (Button)findViewById(R.id.exitBtn);
+        highScoreBtn = (Button)findViewById(R.id.highScoreBtn);
     }
 
     private void startSoundtrack(){
@@ -80,17 +66,30 @@ public class OpenScreen extends Activity {
             }
         });
 
+        highScoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showHighScores();
+            }
+        });
+
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 exitGame();
             }
         });
+
     }
 
 
     private void newGame() {
         Intent intent = new Intent(this, Difficulty.class);
+        startActivity(intent);
+    }
+
+    private void showHighScores(){
+        Intent intent = new Intent(this, HighScoreScreen.class);
         startActivity(intent);
     }
 

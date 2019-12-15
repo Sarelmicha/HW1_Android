@@ -2,21 +2,20 @@ package com.example.hw_sarelmicha;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class GameOverScreen extends Activity {
+public class GameOverScreen extends Activity implements HighScoreVariables {
 
     private Button mainMenu;
     private Button restart;
     private Button exit;
     private TextView score;
     private int mode;
+    private Player playerObject;
+    private HighScore highScore;
 
 
     @Override
@@ -24,12 +23,23 @@ public class GameOverScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over_screen);
         setIds();
+
+
         Bundle data = getIntent().getExtras();
-        score.setText(score.getText().toString() + data.getInt("score"));
         mode = data.getInt("difficulty");
+        playerObject = (Player) data.getSerializable("player");
+        score.setText(score.getText().toString() + playerObject.getScore());
+        handleHighScore();
         addListenersButtons();
 
+    }
 
+    private void handleHighScore(){
+
+        highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
+        highScore.readScores();
+        highScore.addPlayer(playerObject);
+        highScore.writeScore();
 
     }
 

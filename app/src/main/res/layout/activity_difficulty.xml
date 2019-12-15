@@ -62,6 +62,18 @@
             android:gravity="center"
             android:textSize="20dp" />
 
+        <EditText
+            android:id="@+id/player_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:inputType="text"
+            android:text="Player1"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            />
+
     </LinearLayout>
 
 </RelativeLayout>

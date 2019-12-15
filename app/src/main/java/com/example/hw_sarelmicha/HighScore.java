@@ -5,22 +5,25 @@ import android.content.SharedPreferences;
 
 import com.example.hw_sarelmicha.Player;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
-public class HighScore {
+public class HighScore implements HighScoreVariables {
 
     private final String ALL_PLAYERS = "Players";
     private SharedPreferences sharedPreferences;
-    private ArrayList allPlayers;
+    private ArrayList<Player> allPlayers;
 
 
     public HighScore(SharedPreferences sharedPreferences) {
 
-        allPlayers = new ArrayList();
+        allPlayers = new ArrayList<Player>();
         this.sharedPreferences = sharedPreferences;
     }
 
@@ -31,28 +34,27 @@ public class HighScore {
         if (jsonString != null) {
             // Option A:
             Gson gson = new Gson();
-            allPlayers = gson.fromJson(jsonString, ArrayList.class);
+            allPlayers = gson.fromJson(jsonString, new TypeToken<List<Player>>(){}.getType());
         }
     }
 
     public void addPlayer(Player newPlayer){
-        if(allPlayers.size() < 10){
-            //allPlayers[size] = newPlayer;
-            allPlayers.add(newPlayer);
-        } else {
-            //Sort and insert.
-            int index = findIndexToInsert(newPlayer);
-            if(index > -1){
-                allPlayers.add(index,newPlayer);
+
+        int index = findIndexToInsert(newPlayer);
+
+        if(index > -1) {
+            allPlayers.add(index, newPlayer);
+            if(allPlayers.size() > MAX_SIZE)
                 allPlayers.remove(allPlayers.size() - 1);
-            }
         }
+         else if(index == -1 && allPlayers.size() < MAX_SIZE)
+             allPlayers.add(newPlayer);
     }
 
     public int findIndexToInsert(Player newPlayer){
 
         for (int i = 0; i < allPlayers.size() ; i++) {
-            if(newPlayer.compareTo((Player) allPlayers.get(i)) > 0){
+            if(newPlayer.compareTo(allPlayers.get(i)) > 0){
                 return i;
             }
         }
@@ -66,6 +68,10 @@ public class HighScore {
         }
     }
 
+    public ArrayList<Player> getAllPlayers(){
+        return allPlayers;
+    }
+
     public void writeScore(){
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -75,7 +81,6 @@ public class HighScore {
         jsonStringAllPlayers = gson.toJson(allPlayers);
         editor.putString(ALL_PLAYERS, jsonStringAllPlayers);
         editor.apply();
-
     }
 }
 
