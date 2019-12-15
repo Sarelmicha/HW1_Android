@@ -39,12 +39,10 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     protected void onResume() {
         mediaPlayer.start();
         highScore.readScores();
-        //highScore.showAllPlayers();
         super.onResume();
 
     }
     private void setIds(){
-
         //Initialize Buttons
         newGameBtn = (Button)findViewById(R.id.newGameBtn);
         exitBtn = (Button)findViewById(R.id.exitBtn);

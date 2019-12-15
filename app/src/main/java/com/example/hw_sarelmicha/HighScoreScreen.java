@@ -35,7 +35,7 @@ public class HighScoreScreen extends AppCompatActivity implements  HighScoreVari
     protected void onResume() {
 
         OpenScreen.mediaPlayer.start();
-        highScore.readScores(); // redundent need to be check and delete
+        highScore.readScores();
         allPlayersList = highScore.getAllPlayers();
         allHighScores = new TextView[allPlayersList.size()];
         showTop10();
@@ -60,11 +60,11 @@ public class HighScoreScreen extends AppCompatActivity implements  HighScoreVari
         for (int i = 0; i < allPlayersList.size() ; i++) {
             allHighScores[i] = new TextView(this);
             allHighScores[i].setText(String.format("#%-1d :%-10s %-5d", i+ 1,allPlayersList.get(i).getName(),allPlayersList.get(i).getScore()));
-//            allHighScores[i].setText(i + 1  + " : " + allPlayersList.get(i).getName() +"       " + allPlayersList.get(i).getScore());
             allHighScores[i].setTextSize(20);
             allHighScores[i].setTextColor(Color.WHITE);
         }
     }
+
 
     public void showAllTextViewsScoreOnScreen(){
 

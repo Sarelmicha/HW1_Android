@@ -14,6 +14,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,19 +30,21 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 public class MainActivity extends Activity implements SensorEventListener {
 
     private int NUM_OF_COLS;
-    private final int NUM_OF_PICS = 3;
+    private final int NUM_OF_PICS = 4;
     private final int STEP = 100;
-    private final int MAX_ENEMIES = 2;
+    private final int MAX_ENEMIES = 3;
     private final int MIN_ENEMIES = 0;
     final int MIN_DURATION = 3000;
     final int MAX_DURATION = 5000;
     private int numOfLife = 3;
     private int score = 0;
-    private View[] enemies;
-    private int[] enemiesPics;
+    private View[] dropObjects;
+    private int[] dropObjectsPics;
     private View[] life;
     private View jellyFish;
     private LinearLayout[] cols;
@@ -58,11 +61,14 @@ public class MainActivity extends Activity implements SensorEventListener {
     private static int animationIndex;
     private MediaPlayer ouchSound;
     private MediaPlayer biteSound;
+    private MediaPlayer coinSound;
     private TextView scoreView;
     private boolean makeJelly = true;
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private Player playerObject;
+    private boolean freeDive;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,27 +76,30 @@ public class MainActivity extends Activity implements SensorEventListener {
         setContentView(R.layout.activity_main);
         //Get Mode from user
         Bundle data = getIntent().getExtras();
+        freeDive = data.getBoolean("freeDive");
         NUM_OF_COLS = data.getInt("difficulty");
         playerObject = new Player(data.getString("name"),score,0,0);
         setScreenHeightAndWidth();
         setIds();
-        addClickListeners();
+        if(!freeDive)
+            addClickListeners();
+        else{
+            setUpSensors();
+        }
         addEnemiesPics();
         addEnemies(NUM_OF_COLS);
         addLife();
         setUpAnimations();
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
     protected void onResume() {
         final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        if(freeDive)
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         OpenScreen.mediaPlayer.start();
-
         makeJelly = true;
 
 
@@ -116,7 +125,8 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     protected void onPause() {
         OpenScreen.mediaPlayer.pause();
-        sensorManager.unregisterListener(this);
+        if (freeDive)
+            sensorManager.unregisterListener(this);
 
         makeJelly = false;
 
@@ -125,6 +135,14 @@ public class MainActivity extends Activity implements SensorEventListener {
         }
 
         super.onPause();
+    }
+
+
+    private void setUpSensors(){
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_GAME);
     }
 
     private void setIds(){
@@ -136,6 +154,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         rightScreen = (RelativeLayout) findViewById(R.id.right_screen);
         ouchSound = MediaPlayer.create(this, R.raw.ouchsound);
         biteSound = MediaPlayer.create(this, R.raw.bite);
+        coinSound = MediaPlayer.create(this,R.raw.coinsound);
         scoreView = (TextView) findViewById(R.id.score);
         handler = new Handler();
     }
@@ -168,10 +187,11 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private void addEnemiesPics() {
 
-        enemiesPics = new int[NUM_OF_PICS];
-        enemiesPics[0] = R.drawable.plastic;
-        enemiesPics[1]= R.drawable.plastic1;
-        enemiesPics[2]= R.drawable.plastic2;
+        dropObjectsPics = new int[NUM_OF_PICS];
+        dropObjectsPics[0] = R.drawable.plastic;
+        dropObjectsPics[1]= R.drawable.plastic1;
+        dropObjectsPics[2]= R.drawable.plastic2;
+        dropObjectsPics[3] = R.drawable.coin;
     }
 
     private void setUpAnimations() {
@@ -189,13 +209,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 
                     float animatedValue = (float) updatedAnimation.getAnimatedValue();
 
-                    enemies[x].setTranslationY(animatedValue);
-                    enemies[x].setVisibility(View.VISIBLE);
+                    dropObjects[x].setTranslationY(animatedValue);
+                    dropObjects[x].setVisibility(View.VISIBLE);
 
-                    if (isCollide(enemies[x])) {
-                        collideWithEnemyOccurred(updatedAnimation);
-                    } else if (isOutOfHeightScreen(enemies[x])) {
-                        enemyIsOutOfScreen(updatedAnimation,x);
+                    if (isCollide(dropObjects[x])) {
+                        collideWithObjectOccurred(updatedAnimation,x);
+                    } else if (isOutOfHeightScreen(dropObjects[x])) {
+                        objectIsOutOfScreen(updatedAnimation,x);
                     }
                     if(jellyFish != null){
                         if((float)jellyCounter.getAnimatedValue() > 0.5) {
@@ -238,20 +258,28 @@ public class MainActivity extends Activity implements SensorEventListener {
         return false;
     }
 
-    private void enemyIsOutOfScreen(ValueAnimator updatedAnimation,int x){
+    private void objectIsOutOfScreen(ValueAnimator updatedAnimation,int x){
         updateScore();
         updatedAnimation.setDuration(MIN_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
         updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
-        enemies[x].setBackgroundResource(enemiesPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
+        dropObjects[x].setBackgroundResource(dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
         updatedAnimation.start();
     }
 
-    private void collideWithEnemyOccurred(ValueAnimator updatedAnimation){
+    private void collideWithObjectOccurred(ValueAnimator updatedAnimation,int x){
 
-        makeOuchSound();
-        updatedAnimation.setStartDelay(0);
-        updatedAnimation.start();
-        reduceLife();
+        if(dropObjects[x].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
+            score+= 9;
+            makeCoinSound();
+            updateScore();
+        } else {
+            vibrator.vibrate(400);
+            makeOuchSound();
+            reduceLife();
+        }
+        dropObjects[x].setBackgroundResource(dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
+            updatedAnimation.setStartDelay(0);
+            updatedAnimation.start();
     }
 
     private void collideWithJellyfishOccurred(){
@@ -262,8 +290,28 @@ public class MainActivity extends Activity implements SensorEventListener {
         deduceLife();
     }
 
+    private void makeCoinSound(){
+        if(coinSound.isPlaying()) {
+            coinSound.stop();
+            try {
+                coinSound.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        coinSound.start();
+    }
+
     private void makeOuchSound() {
         ouchSound.setVolume(0, 0.7f);
+        if(ouchSound.isPlaying()){
+            ouchSound.stop();
+            try {
+                ouchSound.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         ouchSound.start();
     }
 
@@ -348,6 +396,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         Intent intent = new Intent(this, GameOverScreen.class);
         intent.putExtra("difficulty",NUM_OF_COLS);
         intent.putExtra("player",playerObject);
+        intent.putExtra("freeDive",freeDive);
         startActivity(intent);
         finish();
     }
@@ -367,7 +416,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     private void addEnemies(int numOfCols) {
-        enemies = new View[numOfCols];
+        dropObjects = new View[numOfCols];
         cols = new LinearLayout[numOfCols];
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
 
@@ -375,12 +424,12 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             cols[i] = new LinearLayout(MainActivity.this);
             cols[i].setLayoutParams(lp);
-            enemies[i] = new View(MainActivity.this);
-            enemies[i].setLayoutParams(new LinearLayout.LayoutParams(screenWidth / numOfCols, 250));
-            addGravity(enemies[i], Gravity.TOP);
-            enemies[i].setVisibility(View.INVISIBLE);
-            enemies[i].setBackgroundResource(enemiesPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
-            cols[i].addView(enemies[i]);
+            dropObjects[i] = new View(MainActivity.this);
+            dropObjects[i].setLayoutParams(new LinearLayout.LayoutParams(screenWidth / numOfCols, 250));
+            addGravity(dropObjects[i], Gravity.TOP);
+            dropObjects[i].setVisibility(View.INVISIBLE);
+            dropObjects[i].setBackgroundResource(dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
+            cols[i].addView(dropObjects[i]);
             linearLayoutsContainer.addView(cols[i]);
         }
     }
@@ -438,6 +487,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+
+        if(!freeDive)
+            return;
+
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             if ((player.getX() < screenWidth - player.getWidth() || (int) sensorEvent.values[0] > 0)
                     && (player.getX() > 0 || (int) sensorEvent.values[0] < 0 )) {

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class Difficulty extends Activity {
@@ -20,6 +21,8 @@ public class Difficulty extends Activity {
     private Button hardBtn;
     private Button expertBtn;
     private EditText playerName;
+    private CheckBox checkBox;
+    private boolean isFreeDiveChoose;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,7 @@ public class Difficulty extends Activity {
         easyBtn = (Button)findViewById(R.id.easy_btn);
         hardBtn = (Button)findViewById(R.id.hard_btn);
         expertBtn = (Button)findViewById(R.id.expert_btn);
+        checkBox = (CheckBox)findViewById(R.id.free_dive_checkbox);
         playerName = (EditText)findViewById(R.id.player_name);
     }
 
@@ -84,11 +88,9 @@ public class Difficulty extends Activity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("difficulty",difficulty);
         intent.putExtra("name", playerName.getText().toString());
+        intent.putExtra("freeDive",checkBox.isChecked());
         startActivity(intent);
         finish();
     }
-
-
-
 
 }

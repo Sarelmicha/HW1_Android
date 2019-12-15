@@ -14,6 +14,7 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
     private Button exit;
     private TextView score;
     private int mode;
+    private boolean freeDive;
     private Player playerObject;
     private HighScore highScore;
 
@@ -27,6 +28,7 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
 
         Bundle data = getIntent().getExtras();
         mode = data.getInt("difficulty");
+        freeDive = data.getBoolean("freeDive");
         playerObject = (Player) data.getSerializable("player");
         score.setText(score.getText().toString() + playerObject.getScore());
         handleHighScore();
@@ -92,6 +94,7 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
     private void restartGame() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("difficulty",mode);
+        intent.putExtra("freeDive",freeDive);
         startActivity(intent);
         finish();
     }
