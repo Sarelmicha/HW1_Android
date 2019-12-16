@@ -3,21 +3,15 @@ package com.example.hw_sarelmicha;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class HighScoreScreen extends AppCompatActivity implements  HighScoreVariables {
 
-    private ArrayList<Player> allPlayersList;
+    private ArrayList<PlayerInfo> allPlayersInfoList;
     private TextView[] allHighScores;
     private HighScore highScore;
     private LinearLayout highScoreContainer;
@@ -36,8 +30,8 @@ public class HighScoreScreen extends AppCompatActivity implements  HighScoreVari
 
         OpenScreen.mediaPlayer.start();
         highScore.readScores();
-        allPlayersList = highScore.getAllPlayers();
-        allHighScores = new TextView[allPlayersList.size()];
+        allPlayersInfoList = highScore.getAllPlayers();
+        allHighScores = new TextView[allPlayersInfoList.size()];
         showTop10();
 
         super.onResume();
@@ -57,9 +51,9 @@ public class HighScoreScreen extends AppCompatActivity implements  HighScoreVari
 
     public void createAllTextViewsScore(){
 
-        for (int i = 0; i < allPlayersList.size() ; i++) {
+        for (int i = 0; i < allPlayersInfoList.size() ; i++) {
             allHighScores[i] = new TextView(this);
-            allHighScores[i].setText(String.format("#%d:%-10s %-5d", i+ 1,allPlayersList.get(i).getName(),allPlayersList.get(i).getScore()));
+            allHighScores[i].setText(String.format("#%d:%-10s %-5d", i+ 1, allPlayersInfoList.get(i).getName(), allPlayersInfoList.get(i).getScore()));
             allHighScores[i].setTextSize(20);
             allHighScores[i].setTextColor(Color.WHITE);
         }
@@ -79,9 +73,5 @@ public class HighScoreScreen extends AppCompatActivity implements  HighScoreVari
             allHighScores[i].setLayoutParams(paramsButton);
             highScoreContainer.addView(allHighScores[i]); // dynamicButtonsLinearLayout is the container of the buttons
         }
-
-
-
-
     }
 }

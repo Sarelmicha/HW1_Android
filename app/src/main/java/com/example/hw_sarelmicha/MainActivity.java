@@ -66,7 +66,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private boolean makeJelly = true;
     private SensorManager sensorManager;
     private Sensor accelerometer;
-    private Player playerObject;
+    private PlayerInfo playerInfo;
     private boolean freeDive;
     private Vibrator vibrator;
 
@@ -78,7 +78,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         Bundle data = getIntent().getExtras();
         freeDive = data.getBoolean("freeDive");
         NUM_OF_COLS = data.getInt("difficulty");
-        playerObject = new Player(data.getString("name"),score,0,0);
+        playerInfo = new PlayerInfo(data.getString("name"),score,0,0);
         setScreenHeightAndWidth();
         setIds();
         if(!freeDive)
@@ -392,10 +392,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private void endGame() {
         //set player score before sending it to gameOverScreen
-        playerObject.setScore(score);
+        playerInfo.setScore(score);
         Intent intent = new Intent(this, GameOverScreen.class);
         intent.putExtra("difficulty",NUM_OF_COLS);
-        intent.putExtra("player",playerObject);
+        intent.putExtra("player",playerInfo);
         intent.putExtra("freeDive",freeDive);
         startActivity(intent);
         finish();

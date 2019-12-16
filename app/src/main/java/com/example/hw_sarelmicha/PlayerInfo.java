@@ -2,23 +2,23 @@ package com.example.hw_sarelmicha;
 
 import java.io.Serializable;
 
-public class Player implements Serializable {
+public class PlayerInfo implements Serializable {
 
     private String name;
     private int score;
     private float lat;
     private float lon;
 
-    public Player(String name, int score, float lat, float lon) {
+    public PlayerInfo(String name, int score, float lat, float lon) {
         this.name = name;
         this.score = score;
         this.lat = lat;
         this.lon = lon;
     }
 
-    public int compareTo(Player player){
+    public int compareTo(PlayerInfo playerInfo){
 
-        if(this.score > player.score)
+        if(this.score > playerInfo.score)
             return 1;
         else
             return 0;
@@ -59,7 +59,7 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return "Player{" +
+        return "PlayerInfo{" +
                 "name='" + name + '\'' +
                 ", score=" + score +
                 ", lat='" + lat + '\'' +

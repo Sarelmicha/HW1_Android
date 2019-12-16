@@ -3,7 +3,7 @@ package com.example.hw_sarelmicha;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
-import com.example.hw_sarelmicha.Player;
+import com.example.hw_sarelmicha.PlayerInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -18,12 +18,12 @@ public class HighScore implements HighScoreVariables {
 
     private final String ALL_PLAYERS = "Players";
     private SharedPreferences sharedPreferences;
-    private ArrayList<Player> allPlayers;
+    private ArrayList<PlayerInfo> allPlayersInfos;
 
 
     public HighScore(SharedPreferences sharedPreferences) {
 
-        allPlayers = new ArrayList<Player>();
+        allPlayersInfos = new ArrayList<PlayerInfo>();
         this.sharedPreferences = sharedPreferences;
     }
 
@@ -33,27 +33,27 @@ public class HighScore implements HighScoreVariables {
         if (jsonString != null) {
             // Option A:
             Gson gson = new Gson();
-            allPlayers = gson.fromJson(jsonString, new TypeToken<List<Player>>(){}.getType());
+            allPlayersInfos = gson.fromJson(jsonString, new TypeToken<List<PlayerInfo>>(){}.getType());
         }
     }
 
-    public void addPlayer(Player newPlayer){
+    public void addPlayer(PlayerInfo newPlayerInfo){
 
-        int index = findIndexToInsert(newPlayer);
+        int index = findIndexToInsert(newPlayerInfo);
 
         if(index > -1) {
-            allPlayers.add(index, newPlayer);
-            if(allPlayers.size() > MAX_SIZE)
-                allPlayers.remove(allPlayers.size() - 1);
+            allPlayersInfos.add(index, newPlayerInfo);
+            if(allPlayersInfos.size() > MAX_SIZE)
+                allPlayersInfos.remove(allPlayersInfos.size() - 1);
         }
-         else if(index == -1 && allPlayers.size() < MAX_SIZE)
-             allPlayers.add(newPlayer);
+         else if(index == -1 && allPlayersInfos.size() < MAX_SIZE)
+            allPlayersInfos.add(newPlayerInfo);
     }
 
-    public int findIndexToInsert(Player newPlayer){
+    public int findIndexToInsert(PlayerInfo newPlayerInfo){
 
-        for (int i = 0; i < allPlayers.size() ; i++) {
-            if(newPlayer.compareTo(allPlayers.get(i)) > 0){
+        for (int i = 0; i < allPlayersInfos.size() ; i++) {
+            if(newPlayerInfo.compareTo(allPlayersInfos.get(i)) > 0){
                 return i;
             }
         }
@@ -62,13 +62,13 @@ public class HighScore implements HighScoreVariables {
 
     public void showAllPlayers(){
 
-        for (int i = 0; i < allPlayers.size(); i++) {
-            Log.d("check", "showAllPlayers: " + allPlayers.get(i).toString());
+        for (int i = 0; i < allPlayersInfos.size(); i++) {
+            Log.d("check", "showAllPlayers: " + allPlayersInfos.get(i).toString());
         }
     }
 
-    public ArrayList<Player> getAllPlayers(){
-        return allPlayers;
+    public ArrayList<PlayerInfo> getAllPlayers(){
+        return allPlayersInfos;
     }
 
     public void writeScore(){
@@ -77,7 +77,7 @@ public class HighScore implements HighScoreVariables {
         String jsonStringAllPlayers;
 
         Gson gson = new Gson();
-        jsonStringAllPlayers = gson.toJson(allPlayers);
+        jsonStringAllPlayers = gson.toJson(allPlayersInfos);
         editor.putString(ALL_PLAYERS, jsonStringAllPlayers);
         editor.apply();
     }
