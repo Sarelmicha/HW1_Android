@@ -35,18 +35,17 @@ import java.io.IOException;
 public class MainActivity extends Activity implements SensorEventListener {
 
     private int NUM_OF_COLS;
-    private final int NUM_OF_PICS = 4;
-    private final int STEP = 100;
+//    private final int NUM_OF_PICS = 4;
+//    private final int STEP = 100;
     private final int MAX_ENEMIES = 3;
     private final int MIN_ENEMIES = 0;
     final int MIN_DURATION = 3000;
     final int MAX_DURATION = 5000;
-    private int numOfLife = 3;
+//    private int numOfLife = 3;
     private int score = 0;
-    private View[] dropObjects;
-    private int[] dropObjectsPics;
+    private FallingObject[] dropObjects;
     private View[] life;
-    private View jellyFish;
+    private JellyFish jellyFish;
     private LinearLayout[] cols;
     private ValueAnimator[] animations;
     private ValueAnimator jellyCounter;
@@ -55,13 +54,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     private RelativeLayout leftScreen;
     private RelativeLayout rightScreen;
     private LinearLayout linearLayoutsContainer;
-    private View player;
+    private Player player;
     private int screenWidth;
     private int screenHeight;
     private static int animationIndex;
-    private MediaPlayer ouchSound;
-    private MediaPlayer biteSound;
-    private MediaPlayer coinSound;
+
     private TextView scoreView;
     private boolean makeJelly = true;
     private SensorManager sensorManager;
@@ -69,6 +66,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private PlayerInfo playerInfo;
     private boolean freeDive;
     private Vibrator vibrator;
+    private Effects effects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +79,15 @@ public class MainActivity extends Activity implements SensorEventListener {
         playerInfo = new PlayerInfo(data.getString("name"),score,0,0);
         setScreenHeightAndWidth();
         setIds();
+        player = new Player(this,screenWidth,screenHeight,mainLayout);
+        effects = new Effects();
         if(!freeDive)
             addClickListeners();
         else{
             setUpSensors();
         }
-        addEnemiesPics();
-        addEnemies(NUM_OF_COLS);
-        addLife();
+        FallingObject.addEnemiesPics();
+        addFallingObjects(NUM_OF_COLS);
         setUpAnimations();
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -107,7 +106,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             @Override
             public void run() {
                 if(makeJelly){
-                    addJellyfish();
+                    jellyFish = new JellyFish(MainActivity.this,screenWidth,screenHeight,mainLayout);
                     handler.postDelayed(this, DELAY_TIME);
                 }
             }
@@ -137,7 +136,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onPause();
     }
 
-
     private void setUpSensors(){
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -149,50 +147,12 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
         linearLayoutsContainer = (LinearLayout) findViewById(R.id.linearLayouts_container);
-        player = (View) findViewById(R.id.player);
         leftScreen = (RelativeLayout) findViewById(R.id.left_screen);
         rightScreen = (RelativeLayout) findViewById(R.id.right_screen);
-        ouchSound = MediaPlayer.create(this, R.raw.ouchsound);
-        biteSound = MediaPlayer.create(this, R.raw.bite);
-        coinSound = MediaPlayer.create(this,R.raw.coinsound);
         scoreView = (TextView) findViewById(R.id.score);
         handler = new Handler();
     }
 
-    private void setJellyCounter(){
-
-        final int timeToLive = 10 * 1000; //10 seconds for jelly to live
-
-        jellyCounter = new ValueAnimator();
-        jellyCounter = ValueAnimator.ofFloat(0, 1);
-        jellyCounter.setDuration(timeToLive);
-        jellyCounter.start();
-    }
-
-    private void addJellyfish() {
-
-        jellyFish = new View(this);
-        RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(200, 200);
-        params.rightMargin = (int)(Math.random() * (((screenWidth - 100) - 100) + 1));
-        params.bottomMargin = 60;
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        jellyFish.setLayoutParams(params);
-        jellyFish.setBackgroundResource(R.drawable.jellyfish);
-        jellyFish.setAnimation(fadeInEffect());
-
-        mainLayout.addView(jellyFish);
-        setJellyCounter();
-
-    }
-
-    private void addEnemiesPics() {
-
-        dropObjectsPics = new int[NUM_OF_PICS];
-        dropObjectsPics[0] = R.drawable.plastic;
-        dropObjectsPics[1]= R.drawable.plastic1;
-        dropObjectsPics[2]= R.drawable.plastic2;
-        dropObjectsPics[3] = R.drawable.coin;
-    }
 
     private void setUpAnimations() {
 
@@ -212,14 +172,15 @@ public class MainActivity extends Activity implements SensorEventListener {
                     dropObjects[x].setTranslationY(animatedValue);
                     dropObjects[x].setVisibility(View.VISIBLE);
 
-                    if (isCollide(dropObjects[x])) {
+                    if (player.isCollide(dropObjects[x])) {
                         collideWithObjectOccurred(updatedAnimation,x);
-                    } else if (isOutOfHeightScreen(dropObjects[x])) {
+                    } else if (dropObjects[x].isOutOfHeightScreen()) {
                         objectIsOutOfScreen(updatedAnimation,x);
                     }
                     if(jellyFish != null){
-                        if((float)jellyCounter.getAnimatedValue() > 0.5) {
-                            makeJellyDisappeared();
+                        if((float)jellyFish.getJellyCounter().getAnimatedValue() > 0.5) {
+                            jellyFish.disappeared();
+                            jellyFish = null;
                         }
                     }
                 }
@@ -227,13 +188,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             animations[animationIndex].start();
         }
-    }
-
-    private void makeJellyDisappeared(){
-        jellyFish.setAnimation(fadeOutEffect());
-        jellyFish.setVisibility(View.INVISIBLE);
-        jellyFish = null;
-        jellyCounter.end();
     }
 
     private void setAnimationParameters(){
@@ -246,23 +200,12 @@ public class MainActivity extends Activity implements SensorEventListener {
         animations[animationIndex].setRepeatCount(Animation.INFINITE);
     }
 
-    private boolean isOutOfWidthScreen(View view){
-        if(view.getX() >= screenWidth - 1)
-            return true;
-        return false;
-    }
-
-    private boolean isOutOfHeightScreen(View view){
-        if(view.getY() >= screenHeight - 20)
-            return true;
-        return false;
-    }
 
     private void objectIsOutOfScreen(ValueAnimator updatedAnimation,int x){
         updateScore();
         updatedAnimation.setDuration(MIN_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
         updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
-        dropObjects[x].setBackgroundResource(dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
+        dropObjects[x].setBackgroundResource(FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
         updatedAnimation.start();
     }
 
@@ -270,14 +213,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         if(dropObjects[x].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
             score+= 9;
-            makeCoinSound();
+            dropObjects[x].makeCoinSound();
             updateScore();
         } else {
             vibrator.vibrate(400);
-            makeOuchSound();
-            reduceLife();
+            player.makeOuchSound();
+            player.reduceLife();
+            if (player.getNumOfLife() == 0)
+                endGame();
         }
-        dropObjects[x].setBackgroundResource(dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
+        dropObjects[x].setBackgroundResource(FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
             updatedAnimation.setStartDelay(0);
             updatedAnimation.start();
     }
@@ -286,48 +231,11 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         jellyFish.setVisibility(View.INVISIBLE);
         jellyFish = null;
-        makeBiteSound();
-        deduceLife();
+        player.makeBiteSound();
+        player.deduceLife();
     }
 
-    private void makeCoinSound(){
-        if(coinSound.isPlaying()) {
-            coinSound.stop();
-            try {
-                coinSound.prepare();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        coinSound.start();
-    }
-
-    private void makeOuchSound() {
-        ouchSound.setVolume(0, 0.7f);
-        if(ouchSound.isPlaying()){
-            ouchSound.stop();
-            try {
-                ouchSound.prepare();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        ouchSound.start();
-    }
-
-    private void makeBiteSound(){
-        biteSound.start();
-    }
-
-    private void addLife() {
-        life = new View[numOfLife];
-
-        life[0] = (View) findViewById(R.id.life0);
-        life[1] = (View) findViewById(R.id.life1);
-        life[2] = (View) findViewById(R.id.life2);
-    }
-
-    void setScreenHeightAndWidth() {
+    private void setScreenHeightAndWidth() {
 
         //Get Screen size
         WindowManager wm = getWindowManager();
@@ -344,51 +252,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         scoreView.setText("Score:" + score);
     }
 
-    private synchronized void reduceLife() {
-
-        Animation fadeOut = fadeOutEffect();
-
-        numOfLife--;
-        life[numOfLife].setAnimation(fadeOut);
-        life[numOfLife].setVisibility(View.INVISIBLE);
-
-        if (numOfLife == 0)
-            endGame();
-    }
-
-    private Animation fadeInEffect(){
-
-        //Fade In effect
-        Animation fadeIn = new AlphaAnimation(0, 1);
-        fadeIn.setInterpolator(new AccelerateInterpolator());
-        fadeIn.setStartOffset(0);
-        fadeIn.setDuration(500);
-
-        return fadeIn;
-    }
-
-    private Animation fadeOutEffect(){
-
-        //Fade Out effect
-        Animation fadeOut = new AlphaAnimation(1, 0);
-        fadeOut.setInterpolator(new AccelerateInterpolator());
-        fadeOut.setStartOffset(0);
-        fadeOut.setDuration(500);
-
-        return fadeOut;
-    }
-
-    private synchronized void deduceLife() {
-
-        Animation fadeIn = fadeInEffect();
-
-        if(numOfLife == 3)
-            return;
-        life[numOfLife].setAnimation(fadeIn);
-        life[numOfLife].setVisibility(View.VISIBLE);
-        numOfLife++;
-
-    }
 
     private void endGame() {
         //set player score before sending it to gameOverScreen
@@ -401,22 +264,10 @@ public class MainActivity extends Activity implements SensorEventListener {
         finish();
     }
 
-    private boolean isCollide(View enemy) {
 
-        int[] locationEnemy = new int[2];
-        int[] locationPlayer = new int[2];
+    private void addFallingObjects(int numOfCols) {
+        dropObjects = new FallingObject[numOfCols];
 
-        enemy.getLocationOnScreen(locationEnemy);
-        player.getLocationOnScreen(locationPlayer);
-
-        Rect R1 = new Rect((int) locationEnemy[0], (int) locationEnemy[1] + (enemy.getHeight() / 2), (int) (locationEnemy[0] + enemy.getWidth()), (int) (locationEnemy[1] + enemy.getHeight()));
-        Rect R2 = new Rect((int) (locationPlayer[0]) + (player.getWidth() / 5), (int) (locationPlayer[1]) + (player.getHeight() / 2), (int) (locationPlayer[0] + player.getWidth()) - (player.getWidth() / 3), (int) (locationPlayer[1] + player.getHeight()));
-
-        return R1.intersect(R2);
-    }
-
-    private void addEnemies(int numOfCols) {
-        dropObjects = new View[numOfCols];
         cols = new LinearLayout[numOfCols];
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
 
@@ -424,54 +275,40 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             cols[i] = new LinearLayout(MainActivity.this);
             cols[i].setLayoutParams(lp);
-            dropObjects[i] = new View(MainActivity.this);
+            dropObjects[i] = new FallingObject(MainActivity.this,screenWidth,screenHeight,FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
             dropObjects[i].setLayoutParams(new LinearLayout.LayoutParams(screenWidth / numOfCols, 250));
             addGravity(dropObjects[i], Gravity.TOP);
             dropObjects[i].setVisibility(View.INVISIBLE);
-            dropObjects[i].setBackgroundResource(dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
             cols[i].addView(dropObjects[i]);
             linearLayoutsContainer.addView(cols[i]);
         }
     }
 
 
-    public void movePlayerRight(){
-
-        if (player.getX() > 0) {
-            player.setX(player.getX() - STEP);
-            player.setBackgroundResource(R.drawable.playerright);
-            if (jellyFish != null) {
-                if (isCollide(jellyFish))
-                    collideWithJellyfishOccurred();
-            }
-        }
-    }
-
-    public void movePlayerLeft(){
-
-        if (player.getX() < screenWidth - player.getWidth()){
-            player.setX(player.getX() + STEP);
-            player.setBackgroundResource(R.drawable.playerleft);
-            if(jellyFish != null){
-                if(isCollide(jellyFish))
-                    collideWithJellyfishOccurred();
-            }
-        }
-    }
-
     private void addClickListeners() {
 
         rightScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               movePlayerRight();
+               player.moveRight();
+                if (jellyFish != null) {
+                    if (player.isCollide(jellyFish)){
+                        collideWithJellyfishOccurred();
+                    }
+                }
             }
         });
 
         leftScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               movePlayerLeft();
+               player.moveLeft();
+                if(jellyFish != null){
+                    if(player.isCollide(jellyFish)){
+                       collideWithJellyfishOccurred();
+                    }
+
+                }
             }
         });
 
@@ -495,14 +332,9 @@ public class MainActivity extends Activity implements SensorEventListener {
             if ((player.getX() < screenWidth - player.getWidth() || (int) sensorEvent.values[0] > 0)
                     && (player.getX() > 0 || (int) sensorEvent.values[0] < 0 )) {
                 if((int) sensorEvent.values[0] <= 0){
-                  moveLeftWithSensors(sensorEvent);
+                  player.moveLeftWithSensors(sensorEvent);
                 } else {
-                    moveRightWithSensors(sensorEvent);
-                }
-                //Coliide Jellyfish
-                if(jellyFish != null){
-                    if(isCollide(jellyFish))
-                        collideWithJellyfishOccurred();
+                    player.moveRightWithSensors(sensorEvent);
                 }
             }
             //Move Up and Down
@@ -510,43 +342,20 @@ public class MainActivity extends Activity implements SensorEventListener {
                     && (player.getY() > 0 || (int) sensorEvent.values[1] > 0 )){
                 if((int) sensorEvent.values[1] > 0){
                     //Move down
-                    moveDownWithSensors(sensorEvent);
+                    player.moveDownWithSensors(sensorEvent);
                 } else {
                     //Move up
-                    moveUpWithSensors(sensorEvent);
+                    player.moveUpWithSensors(sensorEvent);
                 }
             }
+            //Coliide Jellyfish
+            if(jellyFish != null){
+                if(player.isCollide(jellyFish)){
+                  collideWithJellyfishOccurred();
+                }
+
+            }
         }
-    }
-
-    public void moveUpWithSensors(SensorEvent sensorEvent){
-
-        if(sensorEvent.values[0] > 0) // move right and up
-            player.setBackgroundResource(R.drawable.rightup);
-        else
-            player.setBackgroundResource(R.drawable.leftup);
-
-        player.setY(player.getY() + (int) sensorEvent.values[1] - 10);
-    }
-
-    public void moveDownWithSensors(SensorEvent sensorEvent){
-        if(sensorEvent.values[0] > 0) // move right and down
-            player.setBackgroundResource(R.drawable.rightdown);
-         else
-            player.setBackgroundResource(R.drawable.leftdown);
-
-        player.setY(player.getY() + (int) sensorEvent.values[1] + 10);
-    }
-
-    public void moveLeftWithSensors(SensorEvent sensorEvent){
-        player.setBackgroundResource(R.drawable.playerleft);
-        player.setX((player.getX() - (int) sensorEvent.values[0] + 10));
-    }
-
-    public void moveRightWithSensors(SensorEvent sensorEvent){
-
-        player.setBackgroundResource(R.drawable.playerright);
-        player.setX((player.getX() - (int) sensorEvent.values[0] - 10));
     }
 
     @Override

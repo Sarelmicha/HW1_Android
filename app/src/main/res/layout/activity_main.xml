@@ -22,30 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <View
-            android:id="@+id/life0"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/life"/>
-
-        <View
-            android:id="@+id/life1"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/life0"
-            android:background="@drawable/life"/>
-
-        <View
-            android:id="@+id/life2"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/life1"
-            android:background="@drawable/life"/>
-
         <TextView
             android:id="@+id/score"
             android:layout_width="wrap_content"
@@ -82,13 +58,12 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-
-    <View
-        android:id="@+id/player"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:background="@drawable/playerleft" />
+    <!--<View-->
+        <!--android:id="@+id/player"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/playerleft" />-->
 
 </RelativeLayout>
