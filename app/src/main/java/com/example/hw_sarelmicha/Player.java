@@ -16,7 +16,7 @@ public class Player extends  GameObject {
     private final int MAX_NUM_OF_LIFE = 3;
     private int playerWidth = 100;
     private int playerHeight = 100;
-    private final int SIZE_TO_ADD = 40;
+    private final int SIZE_TO_ADD = 57;
     private View[] life;
     private int numOfLife = MAX_NUM_OF_LIFE;
     private MediaPlayer ouchSound;
@@ -36,12 +36,12 @@ public class Player extends  GameObject {
 
     public void addPlayerToScreen(RelativeLayout mainLayout, int screenWidth){
 
-        final int BOTTOM_MARGIN = 220;
+        final int BOTTOM_MARGIN = 50;
 
         playerParams = new  RelativeLayout.LayoutParams(playerWidth, playerHeight);
-        playerParams.rightMargin = (int)(Math.random() * (((screenWidth - 100) - 100) + 1));
         playerParams.bottomMargin = BOTTOM_MARGIN;
         playerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        playerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         this.setLayoutParams(playerParams);
         this.setBackgroundResource(R.drawable.playerleft);
         this.setAnimation(effects.fadeInEffect());
@@ -176,6 +176,8 @@ public class Player extends  GameObject {
     public void changeSize(int size){
         setPlayerWidth(getWidth() + size);
         setPlayerHeight(getHeight() + size);
+        playerParams.width = playerWidth;
+        playerParams.height = playerHeight;
     }
 
 
@@ -201,9 +203,6 @@ public class Player extends  GameObject {
         return numOfLife;
     }
 
-    public RelativeLayout.LayoutParams getPlayerParams() {
-        return playerParams;
-    }
 
     public void setPlayerWidth(int playerWidth) {
         this.playerWidth = playerWidth;

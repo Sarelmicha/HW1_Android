@@ -24,36 +24,36 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
-    private int NUM_OF_COLS;
-//    private final int NUM_OF_PICS = 4;
-//    private final int STEP = 100;
     private final int MAX_ENEMIES = 3;
     private final int MIN_ENEMIES = 0;
-    final int MIN_DURATION = 3000;
-    final int MAX_DURATION = 5000;
-//    private int numOfLife = 3;
+    private final int MIN_DURATION = 3000;
+    private final int MAX_DURATION = 5000;
+
+    private int NUM_OF_COLS;
+    private int screenWidth;
+    private int screenHeight;
+    private int animationIndex;
+
+    private PlayerInfo playerInfo;
+    private Player player;
+    private JellyFish jellyFish;
+
     private int score = 0;
     private FallingObject[] dropObjects;
     private View[] life;
-    private JellyFish jellyFish;
+
     private LinearLayout[] cols;
     private ValueAnimator[] animations;
-    private ValueAnimator jellyCounter;
     private Handler handler;
     private RelativeLayout mainLayout;
     private RelativeLayout leftScreen;
     private RelativeLayout rightScreen;
     private LinearLayout linearLayoutsContainer;
-    private Player player;
-    private int screenWidth;
-    private int screenHeight;
-    private static int animationIndex;
 
     private TextView scoreView;
     private boolean makeJelly = true;
     private SensorManager sensorManager;
     private Sensor accelerometer;
-    private PlayerInfo playerInfo;
     private boolean freeDive;
     private Vibrator vibrator;
     private Effects effects;
@@ -196,6 +196,11 @@ public class MainActivity extends Activity implements SensorEventListener {
         updatedAnimation.setDuration(MIN_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
         updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
         dropObjects[x].setBackgroundResource(FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
+        if(dropObjects[x].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
+            dropObjects[x].setWidthAndHeight(150,150);
+        } else {
+            dropObjects[x].setWidthAndHeight(screenWidth / NUM_OF_COLS, 250);
+        }
         updatedAnimation.start();
     }
 
@@ -212,6 +217,11 @@ public class MainActivity extends Activity implements SensorEventListener {
                 endGame();
         }
         dropObjects[x].setBackgroundResource(FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
+        if(dropObjects[x].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
+            dropObjects[x].setWidthAndHeight(150, 150);
+        } else {
+            dropObjects[x].setWidthAndHeight(screenWidth / NUM_OF_COLS, 250);
+        }
             updatedAnimation.setStartDelay(0);
             updatedAnimation.start();
     }
@@ -266,14 +276,17 @@ public class MainActivity extends Activity implements SensorEventListener {
             cols[i] = new LinearLayout(MainActivity.this);
             cols[i].setLayoutParams(lp);
             dropObjects[i] = new FallingObject(MainActivity.this,screenWidth,screenHeight,FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
-            dropObjects[i].setLayoutParams(new LinearLayout.LayoutParams(screenWidth / numOfCols, 250));
+            if(dropObjects[i].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
+                dropObjects[i].setWidthAndHeight(150,150);
+            } else {
+                dropObjects[i].setWidthAndHeight(screenWidth / numOfCols, 250);
+            }
             addGravity(dropObjects[i], Gravity.TOP);
             dropObjects[i].setVisibility(View.INVISIBLE);
             cols[i].addView(dropObjects[i]);
             linearLayoutsContainer.addView(cols[i]);
         }
     }
-
 
     private void addClickListeners() {
 

@@ -25,7 +25,6 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
         setContentView(R.layout.activity_game_over_screen);
         setIds();
 
-
         Bundle data = getIntent().getExtras();
         mode = data.getInt("difficulty");
         freeDive = data.getBoolean("freeDive");

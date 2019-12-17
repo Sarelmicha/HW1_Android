@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 public class GameObject extends View {
 
@@ -24,7 +25,7 @@ public class GameObject extends View {
     }
 
     public boolean isOutOfHeightScreen(View view){
-        if(view.getY() >= screenHeight - 20)
+        if(view.getY() >= screenHeight - 100)
             return true;
         return false;
     }
@@ -53,6 +54,13 @@ public class GameObject extends View {
         if(this.getY() >= screenHeight - 20)
             return true;
         return false;
+    }
+
+    public void setWidthAndHeight(int width, int height){
+
+        LinearLayout.LayoutParams params = new  LinearLayout.LayoutParams(width, height);
+        this.setLayoutParams(params);
+
     }
 
     public int getScreenWidth() {

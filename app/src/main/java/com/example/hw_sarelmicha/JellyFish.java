@@ -30,7 +30,7 @@ public class JellyFish extends GameObject {
 
         final int JELLYFISH_WIDTH = 200;
         final int JELLYFISH_HEIGHT = 200;
-        final int BOTTOM_MARGIN = 60;
+        final int BOTTOM_MARGIN = 30;
 
         RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(JELLYFISH_WIDTH, JELLYFISH_HEIGHT);
         params.rightMargin = (int)(Math.random() * (((screenWidth - 100) - 100) + 1));
