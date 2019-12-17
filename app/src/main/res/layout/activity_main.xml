@@ -58,12 +58,5 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-    <!--<View-->
-        <!--android:id="@+id/player"-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:background="@drawable/playerleft" />-->
 
 </RelativeLayout>

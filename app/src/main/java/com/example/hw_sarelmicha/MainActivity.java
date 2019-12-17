@@ -3,34 +3,24 @@ package com.example.hw_sarelmicha;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.io.IOException;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -80,7 +70,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         setScreenHeightAndWidth();
         setIds();
         player = new Player(this,screenWidth,screenHeight,mainLayout);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         effects = new Effects();
+
         if(!freeDive)
             addClickListeners();
         else{
@@ -89,13 +81,12 @@ public class MainActivity extends Activity implements SensorEventListener {
         FallingObject.addEnemiesPics();
         addFallingObjects(NUM_OF_COLS);
         setUpAnimations();
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
     }
 
     @Override
     protected void onResume() {
         final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
+
         if(freeDive)
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         OpenScreen.mediaPlayer.start();
@@ -202,7 +193,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 
     private void objectIsOutOfScreen(ValueAnimator updatedAnimation,int x){
-        updateScore();
         updatedAnimation.setDuration(MIN_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
         updatedAnimation.setStartDelay((long) (Math.random() * (1000)));
         dropObjects[x].setBackgroundResource(FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
@@ -212,7 +202,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     private void collideWithObjectOccurred(ValueAnimator updatedAnimation,int x){
 
         if(dropObjects[x].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
-            score+= 9;
             dropObjects[x].makeCoinSound();
             updateScore();
         } else {
@@ -248,10 +237,12 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private synchronized void updateScore() {
 
-        score++;
+        score+= 10;
         scoreView.setText("Score:" + score);
+        if(score % 100 == 0){
+            player.changeSize(20);
+        }
     }
-
 
     private void endGame() {
         //set player score before sending it to gameOverScreen
@@ -263,7 +254,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         startActivity(intent);
         finish();
     }
-
 
     private void addFallingObjects(int numOfCols) {
         dropObjects = new FallingObject[numOfCols];
@@ -307,7 +297,6 @@ public class MainActivity extends Activity implements SensorEventListener {
                     if(player.isCollide(jellyFish)){
                        collideWithJellyfishOccurred();
                     }
-
                 }
             }
         });
@@ -329,6 +318,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             return;
 
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            //Move Left and Right
             if ((player.getX() < screenWidth - player.getWidth() || (int) sensorEvent.values[0] > 0)
                     && (player.getX() > 0 || (int) sensorEvent.values[0] < 0 )) {
                 if((int) sensorEvent.values[0] <= 0){
@@ -339,7 +329,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             }
             //Move Up and Down
             if ((player.getY() < screenHeight - player.getHeight() || (int) sensorEvent.values[1] < 0)
-                    && (player.getY() > 0 || (int) sensorEvent.values[1] > 0 )){
+                    && (player.getY() > player.getHeight() || (int) sensorEvent.values[1] > 0 )){
                 if((int) sensorEvent.values[1] > 0){
                     //Move down
                     player.moveDownWithSensors(sensorEvent);
@@ -348,12 +338,11 @@ public class MainActivity extends Activity implements SensorEventListener {
                     player.moveUpWithSensors(sensorEvent);
                 }
             }
-            //Coliide Jellyfish
+            //Collide Jellyfish
             if(jellyFish != null){
                 if(player.isCollide(jellyFish)){
                   collideWithJellyfishOccurred();
                 }
-
             }
         }
     }

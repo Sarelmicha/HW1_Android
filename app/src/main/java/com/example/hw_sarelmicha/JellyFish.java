@@ -28,9 +28,13 @@ public class JellyFish extends GameObject {
 
     private void addJellyfish(int screenWidth, RelativeLayout mainLayout) {
 
-        RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(200, 200);
+        final int JELLYFISH_WIDTH = 200;
+        final int JELLYFISH_HEIGHT = 200;
+        final int BOTTOM_MARGIN = 60;
+
+        RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(JELLYFISH_WIDTH, JELLYFISH_HEIGHT);
         params.rightMargin = (int)(Math.random() * (((screenWidth - 100) - 100) + 1));
-        params.bottomMargin = 60;
+        params.bottomMargin = BOTTOM_MARGIN;
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         this.setLayoutParams(params);
         this.setBackgroundResource(R.drawable.jellyfish);

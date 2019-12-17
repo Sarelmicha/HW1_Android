@@ -59,7 +59,6 @@ public class HighScoreScreen extends AppCompatActivity implements  HighScoreVari
         }
     }
 
-
     public void showAllTextViewsScoreOnScreen(){
 
         LinearLayout.LayoutParams paramsButton = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

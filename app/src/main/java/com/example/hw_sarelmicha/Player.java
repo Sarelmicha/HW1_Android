@@ -13,12 +13,17 @@ import java.io.IOException;
 
 public class Player extends  GameObject {
 
+    private final int MAX_NUM_OF_LIFE = 3;
+    private int playerWidth = 100;
+    private int playerHeight = 100;
+    private final int SIZE_TO_ADD = 40;
     private View[] life;
-    private int numOfLife = 3;
+    private int numOfLife = MAX_NUM_OF_LIFE;
     private MediaPlayer ouchSound;
     private MediaPlayer biteSound;
     private final int STEP = 100;
     private Effects effects;
+    private RelativeLayout.LayoutParams playerParams;
 
 
     public Player(Context context, int screenWidth, int screenHeight,RelativeLayout mainLayout) {
@@ -31,11 +36,13 @@ public class Player extends  GameObject {
 
     public void addPlayerToScreen(RelativeLayout mainLayout, int screenWidth){
 
-        RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(200, 200);
-        params.rightMargin = (int)(Math.random() * (((screenWidth - 100) - 100) + 1));
-        params.bottomMargin = 60;
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        this.setLayoutParams(params);
+        final int BOTTOM_MARGIN = 220;
+
+        playerParams = new  RelativeLayout.LayoutParams(playerWidth, playerHeight);
+        playerParams.rightMargin = (int)(Math.random() * (((screenWidth - 100) - 100) + 1));
+        playerParams.bottomMargin = BOTTOM_MARGIN;
+        playerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        this.setLayoutParams(playerParams);
         this.setBackgroundResource(R.drawable.playerleft);
         this.setAnimation(effects.fadeInEffect());
 
@@ -51,6 +58,7 @@ public class Player extends  GameObject {
 
         final int BUBBLE_WIDTH = 130;
         final int BUBBLE_HEIGHT = 100;
+        final int TOP_MARGIN = 20;
 
         life = new View[numOfLife];
 
@@ -59,7 +67,7 @@ public class Player extends  GameObject {
 
             RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(BUBBLE_WIDTH, BUBBLE_HEIGHT);
             params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            params.topMargin = 20;
+            params.topMargin = TOP_MARGIN;
             params.rightMargin = i * 120;
             life[i] = new View(context);
             life[i].setLayoutParams(params);
@@ -87,34 +95,62 @@ public class Player extends  GameObject {
 
     public void moveUpWithSensors(SensorEvent sensorEvent){
 
-        if(sensorEvent.values[0] > 0) // move right and up
-            this.setBackgroundResource(R.drawable.rightup);
-        else
-            this.setBackgroundResource(R.drawable.leftup);
+        if(sensorEvent.values[0] > 0) {// move right and up
+                if (this.getBackground().getConstantState() != getResources().getDrawable(R.drawable.rightup).getConstantState()) {
+                this.setBackgroundResource(R.drawable.rightup);
+                playerParams.width = playerWidth + SIZE_TO_ADD;
+                playerParams.height = playerHeight + SIZE_TO_ADD;
+                }
+        }
+        else {
+                if(this.getBackground().getConstantState() != getResources().getDrawable(R.drawable.leftup).getConstantState()) {
+                this.setBackgroundResource(R.drawable.leftup);
+                playerParams.width = playerWidth + SIZE_TO_ADD;
+                playerParams.height = playerHeight + SIZE_TO_ADD;
+            }
+        }
 
         this.setY(this.getY() + (int) sensorEvent.values[1] - 10);
     }
 
     public void moveDownWithSensors(SensorEvent sensorEvent){
-        if(sensorEvent.values[0] > 0) // move right and down
-            this.setBackgroundResource(R.drawable.rightdown);
-        else
-            this.setBackgroundResource(R.drawable.leftdown);
+        if(sensorEvent.values[0] > 0){ // move right and down
+                if(this.getBackground().getConstantState() != getResources().getDrawable(R.drawable.rightdown).getConstantState()) {
+                this.setBackgroundResource(R.drawable.rightdown);
+                playerParams.width = playerWidth + SIZE_TO_ADD;
+                playerParams.height = playerHeight + SIZE_TO_ADD;
+                }
+        }
+
+        else {
+                if (this.getBackground().getConstantState() != getResources().getDrawable(R.drawable.leftdown).getConstantState()) {
+                this.setBackgroundResource(R.drawable.leftdown);
+                playerParams.width = playerWidth + SIZE_TO_ADD;
+                playerParams.height = playerHeight + SIZE_TO_ADD;
+            }
+        }
+
 
         this.setY(this.getY() + (int) sensorEvent.values[1] + 10);
     }
 
     public void moveLeftWithSensors(SensorEvent sensorEvent){
-        this.setBackgroundResource(R.drawable.playerleft);
+        if(this.getBackground().getConstantState() != getResources().getDrawable(R.drawable.playerleft).getConstantState()) {
+            this.setBackgroundResource(R.drawable.playerleft);
+            playerParams.width = playerWidth;
+            playerParams.height = playerHeight;
+        }
         this.setX((this.getX() - (int) sensorEvent.values[0] + 10));
     }
 
     public void moveRightWithSensors(SensorEvent sensorEvent){
-
-        this.setBackgroundResource(R.drawable.playerright);
+        if(this.getBackground().getConstantState() != getResources().getDrawable(R.drawable.playerright).getConstantState()) {
+            this.setBackgroundResource(R.drawable.playerright);
+            playerParams.width = playerWidth;
+            playerParams.height = playerHeight;
+        }
         this.setX((this.getX() - (int) sensorEvent.values[0] - 10));
     }
-
 
     public synchronized void reduceLife() {
 
@@ -129,12 +165,17 @@ public class Player extends  GameObject {
 
         Animation fadeIn = effects.fadeInEffect();
 
-        if(numOfLife == 3)
+        if(numOfLife == MAX_NUM_OF_LIFE)
             return;
         life[numOfLife].setAnimation(fadeIn);
         life[numOfLife].setVisibility(View.VISIBLE);
         numOfLife++;
 
+    }
+
+    public void changeSize(int size){
+        setPlayerWidth(getWidth() + size);
+        setPlayerHeight(getHeight() + size);
     }
 
 
@@ -155,7 +196,20 @@ public class Player extends  GameObject {
         biteSound.start();
     }
 
+
     public int getNumOfLife() {
         return numOfLife;
+    }
+
+    public RelativeLayout.LayoutParams getPlayerParams() {
+        return playerParams;
+    }
+
+    public void setPlayerWidth(int playerWidth) {
+        this.playerWidth = playerWidth;
+    }
+
+    public void setPlayerHeight(int playerHeight) {
+        this.playerHeight = playerHeight;
     }
 }
