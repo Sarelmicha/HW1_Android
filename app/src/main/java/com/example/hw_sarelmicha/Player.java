@@ -14,9 +14,9 @@ import java.io.IOException;
 public class Player extends  GameObject {
 
     private final int MAX_NUM_OF_LIFE = 3;
-    private int playerWidth = 100;
-    private int playerHeight = 100;
-    private final int SIZE_TO_ADD = 57;
+    private int playerWidth;
+    private int playerHeight;
+    private final int SIZE_TO_ADD = 52;
     private View[] life;
     private int numOfLife = MAX_NUM_OF_LIFE;
     private MediaPlayer ouchSound;
@@ -26,12 +26,14 @@ public class Player extends  GameObject {
     private RelativeLayout.LayoutParams playerParams;
 
 
-    public Player(Context context, int screenWidth, int screenHeight,RelativeLayout mainLayout) {
+    public Player(Context context, int screenWidth, int screenHeight,RelativeLayout mainLayout,int width, int height) {
         super(context, screenWidth, screenHeight);
         effects = new Effects();
         addPlayerToScreen(mainLayout, screenWidth);
         setLife(context,mainLayout);
         setSounds(context);
+        setPlayerWidth(width);
+        setPlayerHeight(height);
     }
 
     public void addPlayerToScreen(RelativeLayout mainLayout, int screenWidth){
@@ -61,7 +63,6 @@ public class Player extends  GameObject {
         final int TOP_MARGIN = 20;
 
         life = new View[numOfLife];
-
 
         for (int i = 0; i < numOfLife ; i++) {
 
@@ -121,7 +122,6 @@ public class Player extends  GameObject {
                 playerParams.height = playerHeight + SIZE_TO_ADD;
                 }
         }
-
         else {
                 if (this.getBackground().getConstantState() != getResources().getDrawable(R.drawable.leftdown).getConstantState()) {
                 this.setBackgroundResource(R.drawable.leftdown);
@@ -129,8 +129,6 @@ public class Player extends  GameObject {
                 playerParams.height = playerHeight + SIZE_TO_ADD;
             }
         }
-
-
         this.setY(this.getY() + (int) sensorEvent.values[1] + 10);
     }
 
@@ -180,7 +178,6 @@ public class Player extends  GameObject {
         playerParams.height = playerHeight;
     }
 
-
     public void makeOuchSound() {
         ouchSound.setVolume(0, 0.7f);
         if(ouchSound.isPlaying()){
@@ -198,11 +195,9 @@ public class Player extends  GameObject {
         biteSound.start();
     }
 
-
     public int getNumOfLife() {
         return numOfLife;
     }
-
 
     public void setPlayerWidth(int playerWidth) {
         this.playerWidth = playerWidth;

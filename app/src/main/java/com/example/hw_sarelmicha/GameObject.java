@@ -13,9 +13,8 @@ public class GameObject extends View {
 
     public GameObject(Context context, int screenWidth, int screenHeight) {
         super(context);
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
-
+        setScreenWidth(screenWidth);
+        setScreenHeight(screenHeight);
     }
 
     public boolean isOutOfWidthScreen(View view){
