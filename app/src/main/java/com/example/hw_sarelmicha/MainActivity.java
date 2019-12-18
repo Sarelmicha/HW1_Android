@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private final int MIN_ENEMIES = 0;
     private final int MIN_DURATION = 3000;
     private final int MAX_DURATION = 5000;
-
+    
     private int NUM_OF_COLS;
     private int screenWidth;
     private int screenHeight;

@@ -29,16 +29,16 @@ public class Player extends  GameObject {
     public Player(Context context, int screenWidth, int screenHeight,RelativeLayout mainLayout,int width, int height) {
         super(context, screenWidth, screenHeight);
         effects = new Effects();
-        addPlayerToScreen(mainLayout, screenWidth);
         setLife(context,mainLayout);
         setSounds(context);
         setPlayerWidth(width);
         setPlayerHeight(height);
+        addPlayerToScreen(mainLayout, screenWidth);
     }
 
     public void addPlayerToScreen(RelativeLayout mainLayout, int screenWidth){
 
-        final int BOTTOM_MARGIN = 50;
+        final int BOTTOM_MARGIN = 30;
 
         playerParams = new  RelativeLayout.LayoutParams(playerWidth, playerHeight);
         playerParams.bottomMargin = BOTTOM_MARGIN;

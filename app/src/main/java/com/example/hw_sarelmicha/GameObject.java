@@ -17,18 +17,6 @@ public class GameObject extends View {
         setScreenHeight(screenHeight);
     }
 
-    public boolean isOutOfWidthScreen(View view){
-        if(view.getX() >= screenWidth - 1)
-            return true;
-        return false;
-    }
-
-    public boolean isOutOfHeightScreen(View view){
-        if(view.getY() >= screenHeight - 100)
-            return true;
-        return false;
-    }
-
     public boolean isCollide(GameObject gameObject) {
 
         int[] locationFirstGameObject = new int[2];
@@ -50,7 +38,7 @@ public class GameObject extends View {
     }
 
     public boolean isOutOfHeightScreen(){
-        if(this.getY() >= screenHeight - 20)
+        if(this.getY() >= screenHeight - 1)
             return true;
         return false;
     }
