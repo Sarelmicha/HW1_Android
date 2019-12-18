@@ -69,7 +69,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         playerInfo = new PlayerInfo(data.getString("name"),score,0,0);
         setScreenHeightAndWidth();
         setIds();
-        player = new Player(this,screenWidth,screenHeight,mainLayout,100,100);
+        player = new Player(this,screenWidth,screenHeight,mainLayout,170,170);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         effects = new Effects();
 
@@ -249,9 +249,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         score+= 10;
         scoreView.setText("Score:" + score);
-        if(score % 100 == 0){
-            player.changeSize(10);
-        }
     }
 
     private void endGame() {
