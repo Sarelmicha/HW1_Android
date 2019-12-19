@@ -92,6 +92,7 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
 
     private void restartGame() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("name",playerInfo.getName());
         intent.putExtra("difficulty",mode);
         intent.putExtra("freeDive",freeDive);
         startActivity(intent);

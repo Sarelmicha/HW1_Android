@@ -21,7 +21,7 @@ public class JellyFish extends GameObject {
         final int TIME_TO_LIVE = 10 * 1000; //10 seconds for jelly to live
 
         jellyCounter = new ValueAnimator();
-        jellyCounter = ValueAnimator.ofFloat(0, 1);
+        jellyCounter = ValueAnimator.ofFloat(0, 1); //number for 0 to 1 will be increase in 10 seconds;
         jellyCounter.setDuration(TIME_TO_LIVE);
         jellyCounter.start();
     }
@@ -36,17 +36,16 @@ public class JellyFish extends GameObject {
         params.rightMargin = (int)(Math.random() * (((screenWidth - 100) - 100) + 1));
         params.bottomMargin = BOTTOM_MARGIN;
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        this.setLayoutParams(params);
-        this.setBackgroundResource(R.drawable.jellyfish);
-        this.setAnimation(effects.fadeInEffect());
-
+        setLayoutParams(params);
+        setBackgroundResource(R.drawable.jellyfish);
+        setAnimation(effects.fadeInEffect());
         mainLayout.addView(this);
         setJellyCounter();
     }
 
     public void disappeared(){
-        this.setAnimation(effects.fadeOutEffect());
-        this.setVisibility(View.INVISIBLE);
+        setAnimation(effects.fadeOutEffect());
+        setVisibility(View.INVISIBLE);
         jellyCounter.end();
     }
 

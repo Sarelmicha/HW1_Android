@@ -29,6 +29,7 @@ public class Difficulty extends Activity {
         setContentView(R.layout.activity_difficulty);
 
         setIds();
+        playerName.addTextChangedListener(new InputValidator());
         setClickListeners();
 
     }
@@ -87,10 +88,18 @@ public class Difficulty extends Activity {
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("difficulty",difficulty);
+        checkIfNameIsEmpty();
         intent.putExtra("name", playerName.getText().toString());
         intent.putExtra("freeDive",checkBox.isChecked());
         startActivity(intent);
         finish();
+    }
+
+    public void checkIfNameIsEmpty(){
+
+        if(playerName.getText().toString().length() == 0){
+            playerName.setText("Player");
+        }
     }
 
 }

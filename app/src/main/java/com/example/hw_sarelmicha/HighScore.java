@@ -41,10 +41,10 @@ public class HighScore implements HighScoreVariables {
 
         int index = findIndexToInsert(newPlayerInfo);
 
-        if(index > -1) {
+        if(index > -1) { // if we found a player that his score is smaller than newPlayer Score
             allPlayersInfos.add(index, newPlayerInfo);
             if(allPlayersInfos.size() > MAX_SIZE)
-                allPlayersInfos.remove(allPlayersInfos.size() - 1);
+                deleteScore(allPlayersInfos.size() - 1);
         }
          else if(index == -1 && allPlayersInfos.size() < MAX_SIZE)
             allPlayersInfos.add(newPlayerInfo);
@@ -80,6 +80,10 @@ public class HighScore implements HighScoreVariables {
         jsonStringAllPlayers = gson.toJson(allPlayersInfos);
         editor.putString(ALL_PLAYERS, jsonStringAllPlayers);
         editor.apply();
+    }
+
+    public void deleteScore(int index){
+        allPlayersInfos.remove(index);
     }
 }
 

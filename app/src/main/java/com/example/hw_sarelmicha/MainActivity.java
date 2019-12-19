@@ -85,7 +85,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     protected void onResume() {
-        final int DELAY_TIME = 30 * 1000; //30 seconds for jelly
+        final int DELAY_TIME = 30 * 1000; //30 seconds for a new JellyFish
 
         if(freeDive)
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
