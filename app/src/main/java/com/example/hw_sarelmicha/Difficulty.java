@@ -88,7 +88,7 @@ public class Difficulty extends Activity {
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("difficulty",difficulty);
-        if(isNameEmpty())
+        if(InputValidator.isNameEmpty(playerName.getText().toString()))
             intent.putExtra("name", "Player");
          else
             intent.putExtra("name", playerName.getText().toString());
@@ -97,12 +97,6 @@ public class Difficulty extends Activity {
         finish();
     }
 
-    public boolean isNameEmpty(){
 
-        if(playerName.getText().toString().length() == 0){
-            return true;
-        }
-        return false;
-    }
 
 }

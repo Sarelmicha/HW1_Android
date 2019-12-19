@@ -48,4 +48,12 @@ public class InputValidator implements TextWatcher {
         }
 
     }
+
+    public static boolean isNameEmpty(String playerName){
+
+        if(playerName.length() == 0){
+            return true;
+        }
+        return false;
+    }
 }
