@@ -88,18 +88,21 @@ public class Difficulty extends Activity {
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("difficulty",difficulty);
-        checkIfNameIsEmpty();
-        intent.putExtra("name", playerName.getText().toString());
+        if(isNameEmpty())
+            intent.putExtra("name", "Player");
+         else
+            intent.putExtra("name", playerName.getText().toString());
         intent.putExtra("freeDive",checkBox.isChecked());
         startActivity(intent);
         finish();
     }
 
-    public void checkIfNameIsEmpty(){
+    public boolean isNameEmpty(){
 
         if(playerName.getText().toString().length() == 0){
-            playerName.setText("Player");
+            return true;
         }
+        return false;
     }
 
 }

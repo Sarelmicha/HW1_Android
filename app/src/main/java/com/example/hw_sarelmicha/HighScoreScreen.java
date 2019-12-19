@@ -29,6 +29,7 @@ public class HighScoreScreen extends AppCompatActivity implements  HighScoreVari
     protected void onResume() {
 
         OpenScreen.mediaPlayer.start();
+        //highScore.deleteAllScores(); Clear the DB for some QA
         highScore.readScores();
         allPlayersInfoList = highScore.getAllPlayers();
         allHighScores = new TextView[allPlayersInfoList.size()];

@@ -23,7 +23,7 @@ public class HighScore implements HighScoreVariables {
 
     public HighScore(SharedPreferences sharedPreferences) {
 
-        allPlayersInfos = new ArrayList<PlayerInfo>();
+        this.allPlayersInfos = new ArrayList<PlayerInfo>();
         this.sharedPreferences = sharedPreferences;
     }
 
@@ -44,7 +44,7 @@ public class HighScore implements HighScoreVariables {
         if(index > -1) { // if we found a player that his score is smaller than newPlayer Score
             allPlayersInfos.add(index, newPlayerInfo);
             if(allPlayersInfos.size() > MAX_SIZE)
-                deleteScore(allPlayersInfos.size() - 1);
+                deleteOneScore(allPlayersInfos.size() - 1);
         }
          else if(index == -1 && allPlayersInfos.size() < MAX_SIZE)
             allPlayersInfos.add(newPlayerInfo);
@@ -82,8 +82,15 @@ public class HighScore implements HighScoreVariables {
         editor.apply();
     }
 
-    public void deleteScore(int index){
+    public void deleteOneScore(int index){
         allPlayersInfos.remove(index);
+    }
+
+
+    public void deleteAllScores(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }
 

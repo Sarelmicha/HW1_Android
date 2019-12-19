@@ -27,6 +27,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         addListenersButtons();
         highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
 
+
     }
 
     @Override
@@ -38,7 +39,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     @Override
     protected void onResume() {
         mediaPlayer.start();
-        highScore.readScores();
         super.onResume();
 
     }
@@ -94,4 +94,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     public static void exitGame() {
         System.exit(0);
     }
+
+
 }

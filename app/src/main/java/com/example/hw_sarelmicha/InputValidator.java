@@ -15,7 +15,7 @@ public class InputValidator implements TextWatcher {
             englishCheck(s, playerName);
 
         } catch (Exception e){
-            Log.d("ERROR", "somthing went wrong...");
+            Log.d("ERROR", "something went wrong...");
         }
     }
 
