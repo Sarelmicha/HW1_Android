@@ -69,7 +69,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         playerInfo = new PlayerInfo(data.getString("name"),score,0,0);
         setScreenHeightAndWidth();
         setIds();
-        player = new Player(this,screenWidth,screenHeight,mainLayout,170,170);
+        player = new Player(this,screenWidth,screenHeight,mainLayout,170,170, new Effects());
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         effects = new Effects();
 
@@ -97,7 +97,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             @Override
             public void run() {
                 if(makeJelly){
-                    jellyFish = new JellyFish(MainActivity.this,screenWidth,screenHeight,mainLayout);
+                    jellyFish = new JellyFish(MainActivity.this,screenWidth,screenHeight,mainLayout,new Effects());
                     handler.postDelayed(this, DELAY_TIME);
                 }
             }
