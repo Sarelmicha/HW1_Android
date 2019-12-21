@@ -1,14 +1,19 @@
 package com.example.hw_sarelmicha;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Bundle;;
-import android.util.Log;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
-
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 
 public class OpenScreen extends Activity implements HighScoreVariables {
@@ -18,6 +23,11 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     private Button highScoreBtn;
     private HighScore highScore;
     public static MediaPlayer mediaPlayer;
+    private Location currentLocation;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private double lat;
+    private double lon;
+    private static final int REQUEST_CODE = 101;
 
 
     @Override
@@ -28,6 +38,9 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         startSoundtrack();
         addListenersButtons();
         highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLocation();
+
     }
 
     @Override
@@ -82,6 +95,10 @@ public class OpenScreen extends Activity implements HighScoreVariables {
 
     private void newGame() {
         Intent intent = new Intent(this, Difficulty.class);
+        intent.putExtra("lat", lat);
+        intent.putExtra("lon", lon);
+
+
         startActivity(intent);
     }
 
@@ -94,5 +111,25 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         System.exit(0);
     }
 
+    private void fetchLocation() {
 
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+            return;
+        }
+
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    currentLocation = location;
+                    lat = currentLocation.getLatitude();
+                    lon  = currentLocation.getLongitude();
+                }
+            }
+        });
+    }
 }

@@ -28,11 +28,13 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
     private TextView[] allHighScores;
     private HighScore highScore;
     private LinearLayout highScoreContainer;
+    private LinearLayout mapContainer;
     private GoogleMap map;
     private int scorePlayerInfoIndex;
     private SupportMapFragment mapFragment;
     private HashMap<TextView, Integer> hashMap;
     private Location playerLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
         setContentView(R.layout.activity_high_score_screen);
         highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
         highScoreContainer = (LinearLayout) findViewById(R.id.scores_container);
+        mapContainer = (LinearLayout)findViewById(R.id.map_container);
+        mapContainer.setClipToOutline(true);
         mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         hashMap = new HashMap<>();
         playerLocation = new Location("");

@@ -14,7 +14,7 @@ public class PlayerInfo implements Serializable {
     private double lat;
     private double lon;
 
-    public PlayerInfo(String name, int score, float lat, float lon) {
+    public PlayerInfo(String name, int score, double lat, double lon) {
 
         this.name = name;
         this.score = score;
