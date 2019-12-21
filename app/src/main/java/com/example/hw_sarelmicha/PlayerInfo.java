@@ -1,15 +1,21 @@
 package com.example.hw_sarelmicha;
 
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.android.gms.maps.SupportMapFragment;
+
 import java.io.Serializable;
 
 public class PlayerInfo implements Serializable {
 
     private String name;
     private int score;
-    private float lat;
-    private float lon;
+    private double lat;
+    private double lon;
 
     public PlayerInfo(String name, int score, float lat, float lon) {
+
         this.name = name;
         this.score = score;
         this.lat = lat;
@@ -22,8 +28,9 @@ public class PlayerInfo implements Serializable {
             return 1;
         else
             return 0;
-
     }
+
+
 
     public String getName() {
         return name;
@@ -33,11 +40,11 @@ public class PlayerInfo implements Serializable {
         return score;
     }
 
-    public float getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public float getLon() {
+    public double getLon() {
         return lon;
     }
 
@@ -49,13 +56,14 @@ public class PlayerInfo implements Serializable {
         this.score = score;
     }
 
-    public void setLat(float lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public void setLon(float lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
+
 
     @Override
     public String toString() {

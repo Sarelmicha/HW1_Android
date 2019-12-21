@@ -1,10 +1,13 @@
 //Created by Mor Soferian and Sarel Micha
+//Google Maps Key : AIzaSyAHh_MWXUUfkpUDcqJHgdQOPmfuBsfyr8g
 package com.example.hw_sarelmicha;
 
+import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,6 +16,9 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -21,8 +27,15 @@ import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.location.Location;
+import android.widget.Toast;
 
-public class MainActivity extends Activity implements SensorEventListener {
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+public class MainActivity extends FragmentActivity implements SensorEventListener {
 
     private final int MAX_ENEMIES = 3;
     private final int MIN_ENEMIES = 0;
@@ -57,6 +70,9 @@ public class MainActivity extends Activity implements SensorEventListener {
     private boolean freeDive;
     private Vibrator vibrator;
     private Effects effects;
+    public Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private static final int REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +97,13 @@ public class MainActivity extends Activity implements SensorEventListener {
         FallingObject.addEnemiesPics();
         addFallingObjects(NUM_OF_COLS);
         setUpAnimations();
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLocation();
+
     }
 
-    @Override
+        @Override
     protected void onResume() {
         final int DELAY_TIME = 30 * 1000; //30 seconds for a new JellyFish
 
@@ -189,6 +209,25 @@ public class MainActivity extends Activity implements SensorEventListener {
         animations[animationIndex].setDuration(MAX_DURATION + (long)(Math.random() * (MAX_DURATION - MIN_DURATION)));
         animations[animationIndex].setStartDelay((long) (Math.random() * (MIN_DURATION)));
         animations[animationIndex].setRepeatCount(Animation.INFINITE);
+    }
+
+    private void fetchLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    currentLocation = location;
+                    playerInfo.setLat(currentLocation.getLatitude());
+                    playerInfo.setLon(currentLocation.getLongitude()); }
+            }
+        });
     }
 
 

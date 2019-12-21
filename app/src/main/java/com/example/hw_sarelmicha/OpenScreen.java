@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.android.gms.common.GoogleApiAvailability;
 
 
 public class OpenScreen extends Activity implements HighScoreVariables {
@@ -17,7 +20,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     public static MediaPlayer mediaPlayer;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +28,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         startSoundtrack();
         addListenersButtons();
         highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
-
-
     }
 
     @Override
@@ -79,7 +79,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         });
 
     }
-
 
     private void newGame() {
         Intent intent = new Intent(this, Difficulty.class);
