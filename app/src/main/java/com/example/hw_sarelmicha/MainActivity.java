@@ -91,6 +91,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     private void setInstructionIcon(int photo){
 
+        final int DELAY_TIME = 4 * 1000; //4 seconds to be on screen
+
         RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(300, 300);
 
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -107,7 +109,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                 icon.setVisibility(View.INVISIBLE);
                 icon = null;
             }
-        },3500);
+        },DELAY_TIME);
     }
 
         @Override
