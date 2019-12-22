@@ -97,6 +97,8 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
         intent.putExtra("name",playerInfo.getName());
         intent.putExtra("difficulty",mode);
         intent.putExtra("freeDive",freeDive);
+        intent.putExtra("lat", playerInfo.getLat());
+        intent.putExtra("lon", playerInfo.getLon());
         startActivity(intent);
         finish();
     }
