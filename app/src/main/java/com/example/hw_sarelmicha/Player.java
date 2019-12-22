@@ -68,6 +68,7 @@ public class Player extends  GameObject {
 
             RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(BUBBLE_WIDTH, BUBBLE_HEIGHT);
             params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             params.topMargin = TOP_MARGIN;
             params.rightMargin = i * 120;
             life[i] = new View(context);

@@ -74,14 +74,15 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         effects = new Effects();
 
+        FallingObject.addEnemiesPics();
+        addFallingObjects(NUM_OF_COLS);
+        setUpAnimations();
+
         if(!freeDive)
             addClickListeners();
         else{
             setUpSensors();
         }
-        FallingObject.addEnemiesPics();
-        addFallingObjects(NUM_OF_COLS);
-        setUpAnimations();
     }
 
         @Override
@@ -247,7 +248,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     private synchronized void updateScore() {
 
-        score+= 10;
+        score+= 1;
         scoreView.setText("Score:" + score);
     }
 
