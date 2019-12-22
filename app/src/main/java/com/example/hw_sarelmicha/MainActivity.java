@@ -58,6 +58,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     private boolean freeDive;
     private Vibrator vibrator;
     private Effects effects;
+    private View icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +79,35 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         addFallingObjects(NUM_OF_COLS);
         setUpAnimations();
 
-        if(!freeDive)
+        if(!freeDive) {
             addClickListeners();
+            setInstructionIcon(R.drawable.click);
+        }
         else{
             setUpSensors();
+            setInstructionIcon(R.drawable.phonerotate);
         }
+    }
+
+    private void setInstructionIcon(int photo){
+
+        RelativeLayout.LayoutParams params = new  RelativeLayout.LayoutParams(300, 300);
+
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        icon = new View(this);
+        icon.setBackgroundResource(photo);
+        icon.setAnimation(effects.fadeInEffect());
+        icon.setLayoutParams(params);
+        mainLayout.addView(icon);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                icon.setAnimation(effects.fadeOutEffect());
+                icon.setVisibility(View.INVISIBLE);
+                icon = null;
+            }
+        },3500);
     }
 
         @Override
@@ -249,7 +274,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     private synchronized void updateScore() {
 
         score+= 1;
-        scoreView.setText("Score:" + score);
+        scoreView.setText("SCORE:" + score);
     }
 
     private void endGame() {

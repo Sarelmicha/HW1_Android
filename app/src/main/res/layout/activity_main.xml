@@ -32,7 +32,7 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:fontFamily="monospace"
-            android:text="Score:0"
+            android:text="SCORE:0"
             android:textStyle="bold"
             android:layout_alignParentLeft="true"
             android:padding="5dp"
