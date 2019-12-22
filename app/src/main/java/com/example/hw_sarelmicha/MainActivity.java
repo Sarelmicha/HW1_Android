@@ -108,7 +108,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         for (int i = 0; i < NUM_OF_COLS; i++) {
             animations[i].resume();
         }
-
         super.onResume();
     }
 

@@ -8,10 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class GameOverScreen extends Activity implements HighScoreVariables {
 
@@ -52,13 +48,13 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
 
     @Override
     protected void onPause() {
-            OpenScreen.mediaPlayer.pause();;
+        OpenScreen.mediaPlayer.pause();;
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-            OpenScreen.mediaPlayer.start();
+        OpenScreen.mediaPlayer.start();
         super.onResume();
     }
 

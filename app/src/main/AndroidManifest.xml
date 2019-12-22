@@ -3,10 +3,10 @@
     package="com.example.hw_sarelmicha">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -15,16 +15,19 @@
         android:roundIcon="@mipmap/planetsaver_launcher_round"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value= "@string/map_key"/>
         <activity
             android:name=".HighScoreScreen"
             android:label="@string/title_activity_high_score_screen"
-            android:theme="@style/NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".Difficulty"
             android:label="@string/title_activity_difficulty"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"

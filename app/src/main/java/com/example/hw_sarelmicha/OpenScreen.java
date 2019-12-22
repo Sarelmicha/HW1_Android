@@ -40,7 +40,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
-
     }
 
     @Override

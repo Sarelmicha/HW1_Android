@@ -34,6 +34,7 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
     private SupportMapFragment mapFragment;
     private HashMap<TextView, Integer> hashMap;
     private Location playerLocation;
+    private final int MAX_SIZE = 10;
 
 
     @Override
@@ -53,10 +54,10 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
     protected void onResume() {
 
         OpenScreen.mediaPlayer.start();
-        //highScore.deleteAllScores(); //Clear the DB for some QA
+        //highScore.deleteAllScores(); //Clear the DB for some testing
         highScore.readScores();
         allPlayersInfoList = highScore.getAllPlayers();
-        allHighScores = new TextView[allPlayersInfoList.size()];
+        allHighScores = new TextView[MAX_SIZE];
         showTop10();
 
         super.onResume();
@@ -76,18 +77,17 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
 
     public void createAllTextViewsScore(){
 
-        for (scorePlayerInfoIndex = 0; scorePlayerInfoIndex < allPlayersInfoList.size() ; scorePlayerInfoIndex++) {
+        for (scorePlayerInfoIndex = 0; scorePlayerInfoIndex < MAX_SIZE ; scorePlayerInfoIndex++) {
             allHighScores[scorePlayerInfoIndex] = new TextView(this);
-            allHighScores[scorePlayerInfoIndex].setText(String.format("%-1s %-5d %-1f %-1f", allPlayersInfoList.get(scorePlayerInfoIndex).getName(), allPlayersInfoList.get(scorePlayerInfoIndex).getScore(),allPlayersInfoList.get(scorePlayerInfoIndex).getLat(),
-                    allPlayersInfoList.get(scorePlayerInfoIndex).getLon()));
-            allHighScores[scorePlayerInfoIndex].setTextColor(Color.WHITE);
-            hashMap.put(allHighScores[scorePlayerInfoIndex], scorePlayerInfoIndex);
-            allHighScores[scorePlayerInfoIndex].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   showPlayerLocationOnMap(v);
-                }
-            });
+            if(scorePlayerInfoIndex < allPlayersInfoList.size()){
+                hashMap.put(allHighScores[scorePlayerInfoIndex], scorePlayerInfoIndex);
+                allHighScores[scorePlayerInfoIndex].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPlayerLocationOnMap(v);
+                    }
+                });
+            }
         }
     }
     public void showPlayerLocationOnMap(View v){
@@ -98,17 +98,26 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
 
     public void showAllTextViewsScoreOnScreen(){
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.gravity  = Gravity.CENTER;
         highScoreContainer.removeAllViews();
         for (int i = 0; i < allHighScores.length ; i++) {
 
+            //%1$-10s|%2$-10s|%3$-20s|
             allHighScores[i].setId(i);
             allHighScores[i].setPadding(0,10,0,10);
-            allHighScores[i].setTextSize(18);
+            if(i < allPlayersInfoList.size()){
+                allHighScores[i].setText(String.format("%1$-8s %2$-5d %3$-3f %4$3f", allPlayersInfoList.get(i).getName(), allPlayersInfoList.get(i).getScore(),allPlayersInfoList.get(i).getLat(), allPlayersInfoList.get(i).getLon()));
+            }
+            allHighScores[i].setTextColor(Color.WHITE);
+            allHighScores[i].setTextSize(17);
             allHighScores[i].setTypeface(Typeface.create("monospace", Typeface.BOLD));
             allHighScores[i].setLayoutParams(params);
-            highScoreContainer.addView(allHighScores[i]); // dynamicButtonsLinearLayout is the container of the buttons
+            if(i % 2 == 0) {
+                allHighScores[i].setBackgroundColor(Color.HSVToColor(new float[]{228, 94, 41}));
+                allHighScores[i].getBackground().setAlpha(120);
+            }
+            highScoreContainer.addView(allHighScores[i]);
         }
     }
 
