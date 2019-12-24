@@ -41,17 +41,17 @@ public class Settings extends AppCompatActivity {
 
     private void setTextOnButtons() {
         if(musicOn)
-            musicBtn.setText(MUSIC_OFF);
-        else
             musicBtn.setText(MUSIC_ON);
+        else
+            musicBtn.setText(MUSIC_OFF);
         if(regularMode)
-            modeBtn.setText(FREE_DIVE_MODE);
-        else
             modeBtn.setText(REGULAR_MODE);
-        if(vibrationOn)
-            vibrationBtn.setText(VIBRATION_OFF);
         else
+            modeBtn.setText(FREE_DIVE_MODE);
+        if(vibrationOn)
             vibrationBtn.setText(VIBRATION_ON);
+        else
+            vibrationBtn.setText(VIBRATION_OFF);
     }
 
     @Override
@@ -91,14 +91,14 @@ public class Settings extends AppCompatActivity {
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(musicBtn.getText().toString().equals(MUSIC_OFF)){
+                if(musicBtn.getText().toString().equals(MUSIC_ON)){
                     musicOn = false;
                     OpenScreen.mediaPlayer.pause();
-                    musicBtn.setText(MUSIC_ON);
+                    musicBtn.setText(MUSIC_OFF);
                 } else {
                     musicOn = true;
                     OpenScreen.mediaPlayer.start();
-                    musicBtn.setText(MUSIC_OFF);
+                    musicBtn.setText(MUSIC_ON);
                 }
             }
         });
@@ -106,12 +106,12 @@ public class Settings extends AppCompatActivity {
         modeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(modeBtn.getText().toString().equals(FREE_DIVE_MODE)){
+                if(modeBtn.getText().toString().equals(REGULAR_MODE)){
                     regularMode = false;
-                    modeBtn.setText(REGULAR_MODE);
+                    modeBtn.setText(FREE_DIVE_MODE);
                 } else {
                     regularMode = true;
-                    modeBtn.setText(FREE_DIVE_MODE);
+                    modeBtn.setText(REGULAR_MODE);
                 }
             }
         });
@@ -119,12 +119,12 @@ public class Settings extends AppCompatActivity {
         vibrationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(vibrationBtn.getText().toString().equals(VIBRATION_OFF)){
+                if(vibrationBtn.getText().toString().equals(VIBRATION_ON)){
                     vibrationOn = false;
-                    vibrationBtn.setText(VIBRATION_ON);
+                    vibrationBtn.setText(VIBRATION_OFF);
                 } else {
                     vibrationOn = true;
-                    vibrationBtn.setText(VIBRATION_OFF);
+                    vibrationBtn.setText(VIBRATION_ON);
                 }
             }
         });
