@@ -15,8 +15,8 @@ public class FallingObject extends GameObject {
     private MediaPlayer coinSound;
 
 
-    public FallingObject(Context context, int screenWidth, int screenHeight, int background) {
-        super(context, screenWidth, screenHeight);
+    public FallingObject(Context context, int background) {
+        super(context);
         this.setBackgroundResource(background);
         coinSound = MediaPlayer.create(context,R.raw.coinsound);
 

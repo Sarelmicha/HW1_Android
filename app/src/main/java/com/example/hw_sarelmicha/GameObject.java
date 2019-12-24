@@ -8,13 +8,8 @@ import android.widget.LinearLayout;
 
 public class GameObject extends View {
 
-    private int screenWidth;
-    private int screenHeight;
-
-    public GameObject(Context context, int screenWidth, int screenHeight) {
+    public GameObject(Context context) {
         super(context);
-        setScreenWidth(screenWidth);
-        setScreenHeight(screenHeight);
     }
 
     public boolean isCollide(GameObject gameObject) {
@@ -31,38 +26,21 @@ public class GameObject extends View {
         return R1.intersect(R2);
     }
 
-    public boolean isOutOfWidthScreen(){
-        if(this.getX() >= screenWidth - 1)
+    public boolean isOutOfWidthScreen(int screenWidth) {
+        if (this.getX() >= screenWidth - 1)
             return true;
         return false;
     }
 
-    public boolean isOutOfHeightScreen(){
-        if(this.getY() >= screenHeight - 1)
+    public boolean isOutOfHeightScreen(int screenHeight) {
+        if (this.getY() >= screenHeight - 1)
             return true;
         return false;
     }
 
-    public void setWidthAndHeight(int width, int height){
+    public void setWidthAndHeight(int width, int height) {
 
-        LinearLayout.LayoutParams params = new  LinearLayout.LayoutParams(width, height);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
         this.setLayoutParams(params);
-
-    }
-
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-
-    public int getScreenHeight() {
-        return screenHeight;
-    }
-
-    public void setScreenWidth(int screenWidth) {
-        this.screenWidth = screenWidth;
-    }
-
-    public void setScreenHeight(int screenHeight) {
-        this.screenHeight = screenHeight;
     }
 }

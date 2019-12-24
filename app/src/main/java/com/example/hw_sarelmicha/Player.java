@@ -26,8 +26,8 @@ public class Player extends  GameObject {
     private RelativeLayout.LayoutParams playerParams;
 
 
-    public Player(Context context, int screenWidth, int screenHeight,RelativeLayout mainLayout,int width, int height,Effects effects) {
-        super(context, screenWidth, screenHeight);
+    public Player(Context context,int screenWidth,RelativeLayout mainLayout,int width, int height,Effects effects) {
+        super(context);
         this.effects = effects;
         setLife(context,mainLayout);
         setSounds(context);
@@ -79,9 +79,9 @@ public class Player extends  GameObject {
         }
     }
 
-    public void moveLeft(){
+    public void moveLeft(int screenWidth){
 
-        if (this.getX() < this.getScreenWidth() - this.getWidth()){
+        if (this.getX() < screenWidth - this.getWidth()){
             this.setX(this.getX() + STEP);
             this.setBackgroundResource(R.drawable.playerleft);
         }

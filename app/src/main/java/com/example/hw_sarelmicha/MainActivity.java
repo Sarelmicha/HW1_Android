@@ -71,7 +71,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         playerInfo = new PlayerInfo(data.getString("name"),score,data.getDouble("lat"),data.getDouble("lon"));
         setScreenHeightAndWidth();
         setIds();
-        player = new Player(this,screenWidth,screenHeight,mainLayout,170,170, new Effects());
+        player = new Player(this,screenWidth,mainLayout,170,170, new Effects());
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         effects = new Effects();
 
@@ -125,7 +125,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
             @Override
             public void run() {
                 if(makeJelly){
-                    jellyFish = new JellyFish(MainActivity.this,screenWidth,screenHeight,mainLayout,new Effects());
+                    jellyFish = new JellyFish(MainActivity.this,screenWidth,mainLayout,new Effects());
                     handler.postDelayed(this, DELAY_TIME);
                 }
             }
@@ -192,7 +192,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
                     if (player.isCollide(dropObjects[x])) {
                         collideWithObjectOccurred(updatedAnimation,x);
-                    } else if (dropObjects[x].isOutOfHeightScreen()) {
+                    } else if (dropObjects[x].isOutOfHeightScreen(screenHeight)) {
                         objectIsOutOfScreen(updatedAnimation,x);
                     }
                     if(jellyFish != null){
@@ -300,7 +300,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
             cols[i] = new LinearLayout(MainActivity.this);
             cols[i].setLayoutParams(lp);
-            dropObjects[i] = new FallingObject(MainActivity.this,screenWidth,screenHeight,FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
+            dropObjects[i] = new FallingObject(MainActivity.this,FallingObject.dropObjectsPics[(int)(Math.random() * ((MAX_ENEMIES - MIN_ENEMIES) + 1))]);
             if(dropObjects[i].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
                 dropObjects[i].setWidthAndHeight(150,150);
             } else {
@@ -330,7 +330,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         leftScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               player.moveLeft();
+               player.moveLeft(screenWidth);
                 if(jellyFish != null){
                     if(player.isCollide(jellyFish)){
                        collideWithJellyfishOccurred();

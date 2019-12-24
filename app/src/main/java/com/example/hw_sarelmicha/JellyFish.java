@@ -10,8 +10,8 @@ public class JellyFish extends GameObject {
     private Effects effects;
     private ValueAnimator jellyCounter;
 
-    public JellyFish(Context context, int screenWidth, int screenHeight,RelativeLayout mainLayout,Effects effects) {
-        super(context, screenWidth, screenHeight);
+    public JellyFish(Context context,int screenWidth,RelativeLayout mainLayout,Effects effects) {
+        super(context);
         this.effects = effects;
         addJellyfish(screenWidth,mainLayout);
     }
