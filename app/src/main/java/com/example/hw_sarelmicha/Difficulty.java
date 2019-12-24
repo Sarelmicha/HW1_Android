@@ -19,6 +19,7 @@ public class Difficulty extends Activity {
     private EditText playerName;
     private boolean musicOn;
     private boolean regularMode;
+    private boolean vibration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class Difficulty extends Activity {
         Bundle bundle = getIntent().getExtras();
         musicOn = bundle.getBoolean("music");
         regularMode = bundle.getBoolean("mode");
+        vibration = bundle.getBoolean("vibration");
         setIds();
         playerName.addTextChangedListener(new InputValidator());
         setClickListeners();
@@ -94,6 +96,7 @@ public class Difficulty extends Activity {
         intent.putExtra("lon", bundle.getDouble("lon"));
         intent.putExtra("music", musicOn);
         intent.putExtra("mode",regularMode);
+        intent.putExtra("vibration",vibration);
 
         startActivity(intent);
         finish();

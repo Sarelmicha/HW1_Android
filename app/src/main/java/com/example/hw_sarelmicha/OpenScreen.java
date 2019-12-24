@@ -31,6 +31,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     private double lon;
     private Boolean musicOn;
     private boolean regularMode;
+    private boolean vibrationOn;
 
     private static final int REQUEST_CODE = 101;
 
@@ -39,9 +40,10 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         setContentView(R.layout.activity_open_screen);
-        //first time we get in the game musicOn is true and regularGame is true
+        //first time we get in the game musicOn, regularGame and vibrationOn is true
         musicOn = true;
         regularMode = true;
+        vibrationOn = true;
         setIds();
         if(musicOn)
             startSoundtrack();
@@ -73,6 +75,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
             if(resultCode == RESULT_OK) {
                     musicOn = data.getExtras().getBoolean("music");
                     regularMode = data.getExtras().getBoolean("mode");
+                    vibrationOn = data.getExtras().getBoolean("vibration");
             }
         }
     }
@@ -128,6 +131,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         intent.putExtra("lon", lon);
         intent.putExtra("music",musicOn);
         intent.putExtra("mode", regularMode);
+        intent.putExtra("vibration",vibrationOn);
 
         startActivity(intent);
     }
@@ -136,6 +140,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         Intent intent = new Intent(this, Settings.class);
         intent.putExtra("music",musicOn);
         intent.putExtra("mode", regularMode);
+        intent.putExtra("vibration", vibrationOn);
         startActivityForResult(intent, 1);
     }
 

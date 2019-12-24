@@ -3,11 +3,9 @@ package com.example.hw_sarelmicha;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 
 public class GameOverScreen extends Activity implements HighScoreVariables {
 
@@ -20,6 +18,7 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
     private PlayerInfo playerInfo;
     private HighScore highScore;
     private boolean musicOn;
+    private boolean vibrationOn;
 
 
     @Override
@@ -30,8 +29,9 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
 
         Bundle data = getIntent().getExtras();
         mode = data.getInt("difficulty");
-        regularMode = data.getBoolean("mode");
         musicOn = data.getBoolean("music");
+        regularMode = data.getBoolean("mode");
+        vibrationOn = data.getBoolean("vibration");
         playerInfo = (PlayerInfo) data.getSerializable("player");
         score.setText(score.getText().toString() + playerInfo.getScore());
         handleHighScore();
@@ -100,11 +100,11 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("name",playerInfo.getName());
         intent.putExtra("difficulty",mode);
-        intent.putExtra("mode",regularMode);
         intent.putExtra("lat", playerInfo.getLat());
         intent.putExtra("lon", playerInfo.getLon());
         intent.putExtra("music",musicOn);
         intent.putExtra("mode",regularMode);
+        intent.putExtra("vibration",vibrationOn);
         startActivity(intent);
         finish();
     }
@@ -112,7 +112,6 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
     private void goToMainMenu() {
         Intent intent = new Intent(this, OpenScreen.class);
         intent.putExtra("music",musicOn);
-        intent.putExtra("mode",regularMode);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
         finish();

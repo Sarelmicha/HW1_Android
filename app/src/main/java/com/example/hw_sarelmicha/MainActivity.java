@@ -60,6 +60,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     private Effects effects;
     private View icon;
     private boolean musicOn;
+    private boolean vibrationOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +72,12 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         NUM_OF_COLS = data.getInt("difficulty");
         playerInfo = new PlayerInfo(data.getString("name"),score,data.getDouble("lat"),data.getDouble("lon"));
         musicOn = data.getBoolean("music");
+        vibrationOn = data.getBoolean("vibration");
         setScreenHeightAndWidth();
         setIds();
         player = new Player(this,screenWidth,mainLayout,170,170, new Effects());
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if(vibrationOn)
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         effects = new Effects();
 
         FallingObject.addEnemiesPics();
@@ -243,7 +246,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                 dropObjects[x].makeCoinSound();
             updateScore();
         } else {
-            vibrator.vibrate(400);
+            if(vibrationOn)
+                vibrator.vibrate(400);
             if(musicOn)
                 player.makeOuchSound();
             player.reduceLife();
@@ -292,8 +296,9 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         Intent intent = new Intent(this, GameOverScreen.class);
         intent.putExtra("difficulty",NUM_OF_COLS);
         intent.putExtra("player",playerInfo);
-        intent.putExtra("mode",regularMode);
         intent.putExtra("music",musicOn);
+        intent.putExtra("mode",regularMode);
+        intent.putExtra("vibration",vibrationOn);
         startActivity(intent);
         finish();
     }

@@ -19,4 +19,5 @@
     <string name="title_activity_settings">Settings</string>
     <string name="music_off">Music Off</string>
     <string name="free_dive_mode">Free Dive Mode</string>
+    <string name="vibration_on">Vibration On</string>
 </resources>

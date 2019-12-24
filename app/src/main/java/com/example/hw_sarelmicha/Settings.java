@@ -13,19 +13,26 @@ import android.widget.Button;
 public class Settings extends AppCompatActivity {
     private Button modeBtn;
     private Button musicBtn;
+    private Button vibrationBtn;
     private boolean musicOn;
     private boolean regularMode;
+    private boolean vibrationOn;
     private final String REGULAR_MODE = "Regular Mode";
     private final String FREE_DIVE_MODE = "Free Dive Mode";
     private final String MUSIC_ON = "Music On";
     private final String MUSIC_OFF = "Music Off";
+    private final String VIBRATION_ON = "Vibration On";
+    private final String VIBRATION_OFF = "Vibration Off";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        musicOn = getIntent().getExtras().getBoolean("music");
-        regularMode = getIntent().getExtras().getBoolean("mode");
+        Bundle bundle = getIntent().getExtras();
+        musicOn = bundle.getBoolean("music");
+        regularMode = bundle.getBoolean("mode");
+        vibrationOn = bundle.getBoolean("vibration");
         setIds();
         setTextOnButtons();
         addListenersButtons();
@@ -41,6 +48,10 @@ public class Settings extends AppCompatActivity {
             modeBtn.setText(FREE_DIVE_MODE);
         else
             modeBtn.setText(REGULAR_MODE);
+        if(vibrationOn)
+            vibrationBtn.setText(VIBRATION_OFF);
+        else
+            vibrationBtn.setText(VIBRATION_ON);
     }
 
     @Override
@@ -62,6 +73,7 @@ public class Settings extends AppCompatActivity {
         Intent data = new Intent();
         data.putExtra("music", musicOn);
         data.putExtra("mode", regularMode);
+        data.putExtra("vibration",vibrationOn);
         setResult(RESULT_OK, data);
         super.onBackPressed();
     }
@@ -70,6 +82,8 @@ public class Settings extends AppCompatActivity {
         //Initialize Buttons
         modeBtn = (Button)findViewById(R.id.mode);
         musicBtn = (Button)findViewById(R.id.music);
+        vibrationBtn = (Button)findViewById(R.id.vibration);
+
     }
 
     private void addListenersButtons(){
@@ -98,6 +112,19 @@ public class Settings extends AppCompatActivity {
                 } else {
                     regularMode = true;
                     modeBtn.setText(FREE_DIVE_MODE);
+                }
+            }
+        });
+
+        vibrationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(vibrationBtn.getText().toString().equals(VIBRATION_OFF)){
+                    vibrationOn = false;
+                    vibrationBtn.setText(VIBRATION_ON);
+                } else {
+                    vibrationOn = true;
+                    vibrationBtn.setText(VIBRATION_OFF);
                 }
             }
         });
