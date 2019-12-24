@@ -15,4 +15,8 @@
     <string name="title_activity_high_score_screen">HighScoreScreen</string>
     <string name="free_dive">free dive</string>
     <string name="title_activity_background_sound_service">BackgroundSoundService</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="music_off">Music Off</string>
+    <string name="free_dive_mode">Free Dive Mode</string>
 </resources>

@@ -50,6 +50,17 @@
             android:gravity="center"
             android:textSize="20dp" />
 
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:fontFamily="monospace"
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textSize="20dp" />
+
 
         <Button
             style="@style/Widget.AppCompat.Button.Borderless.Colored"

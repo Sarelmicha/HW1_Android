@@ -169,7 +169,6 @@ public class Player extends  GameObject {
         life[numOfLife].setAnimation(fadeIn);
         life[numOfLife].setVisibility(View.VISIBLE);
         numOfLife++;
-
     }
 
     public void changeSize(int size){

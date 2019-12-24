@@ -62,13 +62,6 @@
             android:gravity="center"
             android:textSize="20dp" />
 
-        <CheckBox android:id="@+id/free_dive_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:text="@string/free_dive"/>
 
         <EditText
             android:id="@+id/player_name"

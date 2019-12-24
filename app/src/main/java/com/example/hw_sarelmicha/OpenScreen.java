@@ -8,6 +8,7 @@ import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Bundle;;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -20,6 +21,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
 
     private Button newGameBtn;
     private Button exitBtn;
+    private Button settings;
     private Button highScoreBtn;
     private HighScore highScore;
     public static MediaPlayer mediaPlayer;
@@ -27,15 +29,22 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private double lat;
     private double lon;
-    private static final int REQUEST_CODE = 101;
+    private Boolean musicOn;
+    private boolean regularMode;
 
+    private static final int REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = getIntent().getExtras();
         setContentView(R.layout.activity_open_screen);
+        //first time we get in the game musicOn is true and regularGame is true
+        musicOn = true;
+        regularMode = true;
         setIds();
-        startSoundtrack();
+        if(musicOn)
+            startSoundtrack();
         addListenersButtons();
         highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -44,20 +53,34 @@ public class OpenScreen extends Activity implements HighScoreVariables {
 
     @Override
     protected void onPause() {
-        mediaPlayer.pause();
+        if (musicOn)
+            mediaPlayer.pause();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        mediaPlayer.start();
-        super.onResume();
 
+        if (musicOn)
+            mediaPlayer.start();
+        super.onResume();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                    musicOn = data.getExtras().getBoolean("music");
+                    regularMode = data.getExtras().getBoolean("mode");
+            }
+        }
     }
     private void setIds(){
         //Initialize Buttons
         newGameBtn = (Button)findViewById(R.id.newGameBtn);
         exitBtn = (Button)findViewById(R.id.exitBtn);
+        settings = (Button)findViewById(R.id.settings);
         highScoreBtn = (Button)findViewById(R.id.highScoreBtn);
     }
 
@@ -83,6 +106,13 @@ public class OpenScreen extends Activity implements HighScoreVariables {
             }
         });
 
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSettings();
+            }
+        });
+
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,13 +126,22 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         Intent intent = new Intent(this, Difficulty.class);
         intent.putExtra("lat", lat);
         intent.putExtra("lon", lon);
-
+        intent.putExtra("music",musicOn);
+        intent.putExtra("mode", regularMode);
 
         startActivity(intent);
     }
 
+    private void showSettings(){
+        Intent intent = new Intent(this, Settings.class);
+        intent.putExtra("music",musicOn);
+        intent.putExtra("mode", regularMode);
+        startActivityForResult(intent, 1);
+    }
+
     private void showHighScores(){
         Intent intent = new Intent(this, HighScoreScreen.class);
+        intent.putExtra("music", musicOn);
         startActivity(intent);
     }
 

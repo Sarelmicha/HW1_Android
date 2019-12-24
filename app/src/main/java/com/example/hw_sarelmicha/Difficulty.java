@@ -17,12 +17,16 @@ public class Difficulty extends Activity {
     private Button hardBtn;
     private Button expertBtn;
     private EditText playerName;
-    private CheckBox checkBox;
+    private boolean musicOn;
+    private boolean regularMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_difficulty);
-
+        Bundle bundle = getIntent().getExtras();
+        musicOn = bundle.getBoolean("music");
+        regularMode = bundle.getBoolean("mode");
         setIds();
         playerName.addTextChangedListener(new InputValidator());
         setClickListeners();
@@ -30,13 +34,15 @@ public class Difficulty extends Activity {
 
     @Override
     protected void onPause() {
-        OpenScreen.mediaPlayer.pause();
+        if(musicOn)
+            OpenScreen.mediaPlayer.pause();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        OpenScreen.mediaPlayer.start();
+        if(musicOn)
+            OpenScreen.mediaPlayer.start();
         super.onResume();
     }
 
@@ -45,7 +51,6 @@ public class Difficulty extends Activity {
         easyBtn = (Button)findViewById(R.id.easy_btn);
         hardBtn = (Button)findViewById(R.id.hard_btn);
         expertBtn = (Button)findViewById(R.id.expert_btn);
-        checkBox = (CheckBox)findViewById(R.id.free_dive_checkbox);
         playerName = (EditText)findViewById(R.id.player_name);
     }
 
@@ -82,14 +87,15 @@ public class Difficulty extends Activity {
          else
             intent.putExtra("name", playerName.getText().toString());
 
-        intent.putExtra("freeDive",checkBox.isChecked());
-        intent.putExtra("lat", getIntent().getExtras().getDouble("lat"));
-        intent.putExtra("lon", getIntent().getExtras().getDouble("lon"));
+         Bundle bundle = getIntent().getExtras();
+        intent.putExtra("freeDive",bundle.getBoolean("mode"));
+        intent.putExtra("music",bundle.getBoolean("music"));
+        intent.putExtra("lat",bundle.getDouble("lat"));
+        intent.putExtra("lon", bundle.getDouble("lon"));
+        intent.putExtra("music", musicOn);
+        intent.putExtra("mode",regularMode);
 
         startActivity(intent);
         finish();
     }
-
-
-
 }

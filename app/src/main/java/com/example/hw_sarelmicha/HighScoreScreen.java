@@ -32,6 +32,7 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
     private HashMap<TextView, Integer> hashMap;
     private Location playerLocation;
     private final int MAX_SIZE = 10;
+    private boolean musicOn;
 
 
     @Override
@@ -44,13 +45,15 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
         mapContainer.setClipToOutline(true);
         mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         hashMap = new HashMap<>();
+        musicOn = getIntent().getExtras().getBoolean("music");
         playerLocation = new Location("");
     }
 
     @Override
     protected void onResume() {
 
-        OpenScreen.mediaPlayer.start();
+        if(musicOn)
+            OpenScreen.mediaPlayer.start();
         //highScore.deleteAllScores(); //Clear the DB for some testing
         highScore.readScores();
         allPlayersInfoList = highScore.getAllPlayers();
@@ -62,7 +65,8 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
 
     @Override
     protected void onPause() {
-        OpenScreen.mediaPlayer.pause();
+        if(musicOn)
+            OpenScreen.mediaPlayer.pause();
         super.onPause();
     }
 

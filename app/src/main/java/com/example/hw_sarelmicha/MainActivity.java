@@ -55,10 +55,11 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     private boolean makeJelly = true;
     private SensorManager sensorManager;
     private Sensor accelerometer;
-    private boolean freeDive;
+    private boolean regularMode;
     private Vibrator vibrator;
     private Effects effects;
     private View icon;
+    private boolean musicOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +67,10 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         setContentView(R.layout.activity_main);
         //Get Mode from user
         Bundle data = getIntent().getExtras();
-        freeDive = data.getBoolean("freeDive");
+        regularMode = data.getBoolean("mode");
         NUM_OF_COLS = data.getInt("difficulty");
         playerInfo = new PlayerInfo(data.getString("name"),score,data.getDouble("lat"),data.getDouble("lon"));
+        musicOn = data.getBoolean("music");
         setScreenHeightAndWidth();
         setIds();
         player = new Player(this,screenWidth,mainLayout,170,170, new Effects());
@@ -79,7 +81,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         addFallingObjects(NUM_OF_COLS);
         setUpAnimations();
 
-        if(!freeDive) {
+        if(regularMode) {
             addClickListeners();
             setInstructionIcon(R.drawable.click);
         }
@@ -116,9 +118,10 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     protected void onResume() {
         final int DELAY_TIME = 30 * 1000; //30 seconds for a new JellyFish
 
-        if(freeDive)
+        if(!regularMode)
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-        OpenScreen.mediaPlayer.start();
+        if(musicOn)
+            OpenScreen.mediaPlayer.start();
         makeJelly = true;
 
         final Runnable createJellyfish = new Runnable() {
@@ -141,8 +144,9 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     @Override
     protected void onPause() {
-        OpenScreen.mediaPlayer.pause();
-        if (freeDive)
+        if (musicOn)
+            OpenScreen.mediaPlayer.pause();
+        if (!regularMode)
             sensorManager.unregisterListener(this);
 
         makeJelly = false;
@@ -235,11 +239,13 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     private void collideWithObjectOccurred(ValueAnimator updatedAnimation,int x){
 
         if(dropObjects[x].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
-            dropObjects[x].makeCoinSound();
+            if(musicOn)
+                dropObjects[x].makeCoinSound();
             updateScore();
         } else {
             vibrator.vibrate(400);
-            player.makeOuchSound();
+            if(musicOn)
+                player.makeOuchSound();
             player.reduceLife();
             if (player.getNumOfLife() == 0)
                 endGame();
@@ -258,7 +264,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
         jellyFish.setVisibility(View.INVISIBLE);
         jellyFish = null;
-        player.makeBiteSound();
+        if(musicOn)
+            player.makeBiteSound();
         player.deduceLife();
     }
 
@@ -285,7 +292,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         Intent intent = new Intent(this, GameOverScreen.class);
         intent.putExtra("difficulty",NUM_OF_COLS);
         intent.putExtra("player",playerInfo);
-        intent.putExtra("freeDive",freeDive);
+        intent.putExtra("mode",regularMode);
+        intent.putExtra("music",musicOn);
         startActivity(intent);
         finish();
     }
@@ -352,7 +360,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
 
-        if(!freeDive)
+        if(regularMode)
             return;
 
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {

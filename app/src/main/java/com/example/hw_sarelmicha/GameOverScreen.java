@@ -16,9 +16,10 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
     private Button exit;
     private TextView score;
     private int mode;
-    private boolean freeDive;
+    private boolean regularMode;
     private PlayerInfo playerInfo;
     private HighScore highScore;
+    private boolean musicOn;
 
 
     @Override
@@ -29,7 +30,8 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
 
         Bundle data = getIntent().getExtras();
         mode = data.getInt("difficulty");
-        freeDive = data.getBoolean("freeDive");
+        regularMode = data.getBoolean("mode");
+        musicOn = data.getBoolean("music");
         playerInfo = (PlayerInfo) data.getSerializable("player");
         score.setText(score.getText().toString() + playerInfo.getScore());
         handleHighScore();
@@ -48,13 +50,15 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
 
     @Override
     protected void onPause() {
-        OpenScreen.mediaPlayer.pause();;
+        if(musicOn)
+            OpenScreen.mediaPlayer.pause();;
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        OpenScreen.mediaPlayer.start();
+        if(musicOn)
+            OpenScreen.mediaPlayer.start();
         super.onResume();
     }
 
@@ -96,15 +100,19 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("name",playerInfo.getName());
         intent.putExtra("difficulty",mode);
-        intent.putExtra("freeDive",freeDive);
+        intent.putExtra("mode",regularMode);
         intent.putExtra("lat", playerInfo.getLat());
         intent.putExtra("lon", playerInfo.getLon());
+        intent.putExtra("music",musicOn);
+        intent.putExtra("mode",regularMode);
         startActivity(intent);
         finish();
     }
 
     private void goToMainMenu() {
         Intent intent = new Intent(this, OpenScreen.class);
+        intent.putExtra("music",musicOn);
+        intent.putExtra("mode",regularMode);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
         finish();
