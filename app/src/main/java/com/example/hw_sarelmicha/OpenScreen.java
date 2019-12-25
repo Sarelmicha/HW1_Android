@@ -3,6 +3,7 @@ package com.example.hw_sarelmicha;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
@@ -32,7 +33,8 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     private Boolean musicOn;
     private boolean regularMode;
     private boolean vibrationOn;
-
+    private final String SETTINGS_FILE = "SettingsFile";
+    private SharedPreferences sharedPreferences;
     private static final int REQUEST_CODE = 101;
 
     @Override
@@ -40,13 +42,9 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         setContentView(R.layout.activity_open_screen);
-        //first time we get in the game musicOn, regularGame and vibrationOn is true
-        musicOn = true;
-        regularMode = true;
-        vibrationOn = true;
+        getSettingsStateFromFile();
         setIds();
-        if(musicOn)
-            startSoundtrack();
+        createSoundtrack();
         addListenersButtons();
         highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -62,7 +60,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
 
     @Override
     protected void onResume() {
-
         if (musicOn)
             mediaPlayer.start();
         super.onResume();
@@ -79,6 +76,14 @@ public class OpenScreen extends Activity implements HighScoreVariables {
             }
         }
     }
+
+    private void getSettingsStateFromFile(){
+
+        sharedPreferences = (getApplicationContext().getSharedPreferences(SETTINGS_FILE, MODE_PRIVATE));
+        musicOn = sharedPreferences.getBoolean("music",true);
+        regularMode = sharedPreferences.getBoolean("mode", true);
+        vibrationOn = sharedPreferences.getBoolean("vibration", true);
+    }
     private void setIds(){
         //Initialize Buttons
         newGameBtn = (Button)findViewById(R.id.newGameBtn);
@@ -87,10 +92,9 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         highScoreBtn = (Button)findViewById(R.id.highScoreBtn);
     }
 
-    private void startSoundtrack(){
+    private void createSoundtrack(){
         mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic);
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
     }
 
     private void addListenersButtons(){
@@ -138,9 +142,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
 
     private void showSettings(){
         Intent intent = new Intent(this, Settings.class);
-        intent.putExtra("music",musicOn);
-        intent.putExtra("mode", regularMode);
-        intent.putExtra("vibration", vibrationOn);
         startActivityForResult(intent, 1);
     }
 

@@ -1,6 +1,7 @@
 package com.example.hw_sarelmicha;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,22 +18,21 @@ public class Settings extends AppCompatActivity {
     private boolean musicOn;
     private boolean regularMode;
     private boolean vibrationOn;
+    private SharedPreferences sharedPreferences;
     private final String REGULAR_MODE = "Regular Mode";
     private final String FREE_DIVE_MODE = "Free Dive Mode";
     private final String MUSIC_ON = "Music On";
     private final String MUSIC_OFF = "Music Off";
     private final String VIBRATION_ON = "Vibration On";
     private final String VIBRATION_OFF = "Vibration Off";
+    private final String SETTINGS_FILE = "SettingsFile";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        Bundle bundle = getIntent().getExtras();
-        musicOn = bundle.getBoolean("music");
-        regularMode = bundle.getBoolean("mode");
-        vibrationOn = bundle.getBoolean("vibration");
+        getSettingsStateFromFile();
         setIds();
         setTextOnButtons();
         addListenersButtons();
@@ -65,6 +65,12 @@ public class Settings extends AppCompatActivity {
     protected void onPause() {
         if(musicOn)
             OpenScreen.mediaPlayer.pause();
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("music",musicOn);
+        editor.putBoolean("mode",regularMode);
+        editor.putBoolean("vibration",vibrationOn);
+        editor.commit();
         super.onPause();
     }
 
@@ -76,6 +82,14 @@ public class Settings extends AppCompatActivity {
         data.putExtra("vibration",vibrationOn);
         setResult(RESULT_OK, data);
         super.onBackPressed();
+    }
+
+    private void getSettingsStateFromFile(){
+
+        sharedPreferences = (getApplicationContext().getSharedPreferences(SETTINGS_FILE, MODE_PRIVATE));
+        musicOn = sharedPreferences.getBoolean("music",true);
+        regularMode = sharedPreferences.getBoolean("mode", true);
+        vibrationOn = sharedPreferences.getBoolean("vibration", true);
     }
 
     private void setIds(){
