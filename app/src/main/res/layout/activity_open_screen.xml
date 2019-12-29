@@ -27,7 +27,6 @@
             android:textColor="#FFFFFF"
             android:textSize="50dp" />
 
-
         <Button
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:fontFamily="monospace"

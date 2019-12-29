@@ -1,5 +1,5 @@
 //Created by Mor Soferian and Sarel Micha
-//Google Maps Key : AIzaSyAHh_MWXUUfkpUDcqJHgdQOPmfuBsfyr8g
+
 package com.example.hw_sarelmicha;
 
 import android.animation.ValueAnimator;
