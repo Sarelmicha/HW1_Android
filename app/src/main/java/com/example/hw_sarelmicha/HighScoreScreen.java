@@ -108,7 +108,7 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
             allHighScores[i].setId(i);
             allHighScores[i].setPadding(0,10,0,10);
             if(i < allPlayersInfoList.size()){
-                allHighScores[i].setText(String.format("%1$-8s %2$-5d %3$-3f %4$3f", allPlayersInfoList.get(i).getName(), allPlayersInfoList.get(i).getScore(),allPlayersInfoList.get(i).getLat(), allPlayersInfoList.get(i).getLon()));
+                allHighScores[i].setText(String.format(" %1$-29s %2$-5d", allPlayersInfoList.get(i).getName(), allPlayersInfoList.get(i).getScore()));
             }
             allHighScores[i].setTextColor(Color.WHITE);
             allHighScores[i].setTextSize(17);

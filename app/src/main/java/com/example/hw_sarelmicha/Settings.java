@@ -26,7 +26,7 @@ public class Settings extends AppCompatActivity {
     private final String VIBRATION_ON = "Vibration On";
     private final String VIBRATION_OFF = "Vibration Off";
     private final String SETTINGS_FILE = "SettingsFile";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
