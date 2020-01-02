@@ -36,16 +36,18 @@
             android:textColor="#FFFFFF"
             android:textSize="20dp"/>
 
+
         <Button
             android:fontFamily="monospace"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:id="@+id/main_menu"
+            android:id="@+id/newGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_menu"
-            android:textColor="#FFFFFF"
             android:gravity="center"
+            android:text="@string/newgame"
+            android:textColor="#FFFFFF"
             android:textSize="20dp" />
+
 
         <Button
             android:fontFamily="monospace"
@@ -61,13 +63,14 @@
         <Button
             android:fontFamily="monospace"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:id="@+id/exit"
+            android:id="@+id/main_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/exit"
+            android:text="@string/main_menu"
             android:textColor="#FFFFFF"
+            android:gravity="center"
             android:textSize="20dp" />
+
 
 
     </LinearLayout>

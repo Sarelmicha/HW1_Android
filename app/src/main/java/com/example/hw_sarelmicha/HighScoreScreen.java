@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
     private SupportMapFragment mapFragment;
     private HashMap<TextView, Integer> hashMap;
     private Location playerLocation;
+    private String playerName;
     private final int MAX_SIZE = 10;
     private boolean musicOn;
 
@@ -94,6 +96,7 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
     public void showPlayerLocationOnMap(View v){
         playerLocation.setLatitude(allPlayersInfoList.get(hashMap.get(v)).getLat());
         playerLocation.setLongitude(allPlayersInfoList.get(hashMap.get(v)).getLon());
+        playerName = allPlayersInfoList.get(hashMap.get(v)).getName();
         mapFragment.getMapAsync(this);
     }
 
@@ -126,9 +129,9 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
     public void onMapReady(GoogleMap googleMap) {
 
         LatLng latLng = new LatLng(playerLocation.getLatitude(), playerLocation.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(playerName);
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         googleMap.addMarker(markerOptions);
 
     }

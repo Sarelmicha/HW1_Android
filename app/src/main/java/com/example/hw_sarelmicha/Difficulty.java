@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class Difficulty extends Activity {
@@ -25,10 +24,7 @@ public class Difficulty extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_difficulty);
-        Bundle bundle = getIntent().getExtras();
-        musicOn = bundle.getBoolean("music");
-        regularMode = bundle.getBoolean("mode");
-        vibration = bundle.getBoolean("vibration");
+        handleData();
         setIds();
         playerName.addTextChangedListener(new InputValidator());
         setClickListeners();
@@ -46,6 +42,14 @@ public class Difficulty extends Activity {
         if(musicOn)
             OpenScreen.mediaPlayer.start();
         super.onResume();
+    }
+
+    private void handleData(){
+
+        Bundle bundle = getIntent().getExtras();
+        musicOn = bundle.getBoolean("music");
+        regularMode = bundle.getBoolean("mode");
+        vibration = bundle.getBoolean("vibration");
     }
 
     private void setIds(){
@@ -83,14 +87,14 @@ public class Difficulty extends Activity {
     private void passDifficultyToAnotherActivity(int difficulty){
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("difficulty",difficulty);
+        Bundle bundle = getIntent().getExtras();
+
         if(InputValidator.isNameEmpty(playerName.getText().toString()))
             intent.putExtra("name", "Player");
          else
             intent.putExtra("name", playerName.getText().toString());
 
-         Bundle bundle = getIntent().getExtras();
-        intent.putExtra("freeDive",bundle.getBoolean("mode"));
+        intent.putExtra("difficulty",difficulty);
         intent.putExtra("music",bundle.getBoolean("music"));
         intent.putExtra("lat",bundle.getDouble("lat"));
         intent.putExtra("lon", bundle.getDouble("lon"));

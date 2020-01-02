@@ -11,9 +11,9 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
 
     private Button mainMenu;
     private Button restart;
-    private Button exit;
+    private Button newGame;
     private TextView score;
-    private int mode;
+    private int difficulty;
     private boolean regularMode;
     private PlayerInfo playerInfo;
     private HighScore highScore;
@@ -26,17 +26,21 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over_screen);
         setIds();
-
-        Bundle data = getIntent().getExtras();
-        mode = data.getInt("difficulty");
-        musicOn = data.getBoolean("music");
-        regularMode = data.getBoolean("mode");
-        vibrationOn = data.getBoolean("vibration");
-        playerInfo = (PlayerInfo) data.getSerializable("player");
+        handleData();
         score.setText(score.getText().toString() + playerInfo.getScore());
         handleHighScore();
         addListenersButtons();
 
+    }
+
+    private void handleData(){
+
+        Bundle data = getIntent().getExtras();
+        difficulty = data.getInt("difficulty");
+        musicOn = data.getBoolean("music");
+        regularMode = data.getBoolean("mode");
+        vibrationOn = data.getBoolean("vibration");
+        playerInfo = (PlayerInfo) data.getSerializable("player");
     }
 
     private void handleHighScore(){
@@ -64,14 +68,21 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
 
     private void setIds(){
 
+        newGame = (Button)findViewById(R.id.newGame);
         mainMenu = (Button)findViewById(R.id.main_menu);
         restart = (Button)findViewById(R.id.restart);
-        exit = (Button)findViewById(R.id.exit);
         score = (TextView)findViewById(R.id.score);
     }
 
 
     private void addListenersButtons(){
+
+        newGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createNewGame();
+            }
+        });
 
         mainMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,19 +98,24 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
             }
         });
 
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finishAffinity();
-                OpenScreen.exitGame();
-            }
-        });
+    }
+
+    private void createNewGame() {
+
+        Intent intent = new Intent(this, Difficulty.class);
+        intent.putExtra("lat", playerInfo.getLat());
+        intent.putExtra("lon", playerInfo.getLon());
+        intent.putExtra("music",musicOn);
+        intent.putExtra("mode",regularMode);
+        intent.putExtra("vibration",vibrationOn);
+        startActivity(intent);
+        finish();
     }
 
     private void restartGame() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("name",playerInfo.getName());
-        intent.putExtra("difficulty",mode);
+        intent.putExtra("difficulty",difficulty);
         intent.putExtra("lat", playerInfo.getLat());
         intent.putExtra("lon", playerInfo.getLon());
         intent.putExtra("music",musicOn);
@@ -110,6 +126,7 @@ public class GameOverScreen extends Activity implements HighScoreVariables {
     }
 
     private void goToMainMenu() {
+
         Intent intent = new Intent(this, OpenScreen.class);
         intent.putExtra("music",musicOn);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

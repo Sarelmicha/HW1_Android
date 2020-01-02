@@ -67,12 +67,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Get Mode from user
-        Bundle data = getIntent().getExtras();
-        regularMode = data.getBoolean("mode");
-        NUM_OF_COLS = data.getInt("difficulty");
-        playerInfo = new PlayerInfo(data.getString("name"),score,data.getDouble("lat"),data.getDouble("lon"));
-        musicOn = data.getBoolean("music");
-        vibrationOn = data.getBoolean("vibration");
+        handleData();
         setScreenHeightAndWidth();
         setIds();
         player = new Player(this,screenWidth,mainLayout,170,170, new Effects());
@@ -92,6 +87,16 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
             setUpSensors();
             setInstructionIcon(R.drawable.phonerotate);
         }
+    }
+
+    private void handleData() {
+
+        Bundle data = getIntent().getExtras();
+        regularMode = data.getBoolean("mode");
+        NUM_OF_COLS = data.getInt("difficulty");
+        playerInfo = new PlayerInfo(data.getString("name"),score,data.getDouble("lat"),data.getDouble("lon"));
+        musicOn = data.getBoolean("music");
+        vibrationOn = data.getBoolean("vibration");
     }
 
     private void setInstructionIcon(int photo){
