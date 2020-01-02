@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -39,6 +38,7 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_score_screen);
         highScore = new HighScore(getApplicationContext().getSharedPreferences(SCORE_FILE, MODE_PRIVATE));
@@ -49,6 +49,7 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
         hashMap = new HashMap<>();
         musicOn = getIntent().getExtras().getBoolean("music");
         playerLocation = new Location("");
+
     }
 
     @Override
@@ -102,6 +103,11 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
 
     public void showAllTextViewsScoreOnScreen(){
 
+        final int R = 228;
+        final int G = 94;
+        final int B = 41;
+        final int ALPHA = 120;
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.gravity  = Gravity.CENTER;
         highScoreContainer.removeAllViews();
@@ -118,8 +124,8 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
             allHighScores[i].setTypeface(Typeface.create("monospace", Typeface.BOLD));
             allHighScores[i].setLayoutParams(params);
             if(i % 2 == 0) {
-                allHighScores[i].setBackgroundColor(Color.HSVToColor(new float[]{228, 94, 41}));
-                allHighScores[i].getBackground().setAlpha(120);
+                allHighScores[i].setBackgroundColor(Color.HSVToColor(new float[]{R, G, B}));
+                allHighScores[i].getBackground().setAlpha(ALPHA);
             }
             highScoreContainer.addView(allHighScores[i]);
         }
@@ -128,11 +134,12 @@ public class HighScoreScreen extends FragmentActivity implements  HighScoreVaria
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        final int ZOOM = 15;
+
         LatLng latLng = new LatLng(playerLocation.getLatitude(), playerLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(playerName);
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM));
         googleMap.addMarker(markerOptions);
-
     }
 }
