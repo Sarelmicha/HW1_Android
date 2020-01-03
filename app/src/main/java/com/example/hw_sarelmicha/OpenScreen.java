@@ -1,5 +1,8 @@
 package com.example.hw_sarelmicha;
 
+//import com.google.android.gms.location.LocationCallback;
+//import com.google.android.gms.location.LocationRequest;
+//import com.google.android.gms.location.LocationResult;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,17 +11,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Bundle;;
-import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,8 +36,8 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     private boolean vibrationOn;
     private final String SETTINGS_FILE = "SettingsFile";
     private SharedPreferences sharedPreferences;
-    private LocationCallback locationCallback;
-    private LocationRequest locationRequest;
+//    private LocationCallback locationCallback;
+//    private LocationRequest locationRequest;
     private static final int REQUEST_CODE = 101;
     private boolean locationHasBeenSetUp = false;
 
@@ -154,8 +151,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
             startActivity(intent);
     }
 
-
-
     private void fetchLocation() {
 
         if (ActivityCompat.checkSelfPermission(
@@ -173,8 +168,9 @@ public class OpenScreen extends Activity implements HighScoreVariables {
                     lat = currentLocation.getLatitude();
                     lon  = currentLocation.getLongitude();
                     locationHasBeenSetUp = true;
+                    return;
                 }
-                return;
+
             }
         });
         //if you are here it means get location failed.
@@ -192,39 +188,42 @@ public class OpenScreen extends Activity implements HighScoreVariables {
         lat = 40.730610;
         lon = -73.935242;
     }
-
-    private void createLocationRequest(){
-
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(100);
-        locationRequest.setFastestInterval(100);
-    }
-
-    private void createLocationCallback(){
-
-        Log.d("TUGA", "fetchLocation: chuckimama");
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    currentLocation = location;
-                }
-                Log.d("TUGA", "fetchLocation: its good");
-                lat = currentLocation.getLatitude();
-                lon  = currentLocation.getLongitude();
-                locationHasBeenSetUp = true;
-
-                if (fusedLocationProviderClient != null) {
-                    fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-                }
-            }
-        };
-    }
+//    private void createLocationRequest(){
+//
+//        Log.d("TUGA", "inside createLocationReq");
+//
+//        locationRequest = LocationRequest.create();
+//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        locationRequest.setInterval(100);
+//        locationRequest.setFastestInterval(100);
+//    }
+//
+//    private void createLocationCallback(){
+//
+//        Log.d("TUGA", "inside cretaeCallBack");
+//
+//        locationCallback = new LocationCallback() {
+//            @Override
+//            public void onLocationResult(LocationResult locationResult) {
+//                if (locationResult == null) {
+//                    Log.d("TUGA", "maybe im here?");
+//                    return;
+//                }
+//                for (Location location : locationResult.getLocations()) {
+//                    Log.d("TUGA", "OR maybe im here?");
+//                    currentLocation = location;
+//                }
+//                Log.d("TUGA", "fetchLocation: its good");
+//                lat = currentLocation.getLatitude();
+//                lon  = currentLocation.getLongitude();
+//                locationHasBeenSetUp = true;
+//
+//                if (fusedLocationProviderClient != null) {
+//                    fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+//                }
+//            }
+//        };
+//    }
 }
 
 

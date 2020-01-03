@@ -246,7 +246,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     private void collideWithObjectOccurred(ValueAnimator updatedAnimation,int x){
 
-        if(dropObjects[x].getBackground().getConstantState()==getResources().getDrawable(R.drawable.coin).getConstantState()){
+        if(dropObjects[x].getBackground().getConstantState()== getResources().getDrawable(R.drawable.coin).getConstantState()){
             if(musicOn)
                 dropObjects[x].makeCoinSound();
             updateScore();
@@ -356,8 +356,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                 }
             }
         });
-
     }
+
     private void addGravity(View view, int... gravity) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
 
@@ -369,9 +369,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-
-        if(regularMode)
-            return;
 
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             //Move Left and Right
