@@ -47,8 +47,8 @@ public class Player extends  GameObject {
         this.setLayoutParams(playerParams);
         this.setBackgroundResource(R.drawable.playerleft);
         this.setAnimation(effects.fadeInEffect());
-
         mainLayout.addView(this);
+
     }
 
     public void setSounds(Context context){

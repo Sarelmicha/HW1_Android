@@ -1,16 +1,8 @@
 package com.example.hw_sarelmicha;
-
-import android.app.Activity;
 import android.content.SharedPreferences;
-
-import com.example.hw_sarelmicha.PlayerInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

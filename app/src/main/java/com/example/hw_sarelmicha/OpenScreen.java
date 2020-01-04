@@ -11,7 +11,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Bundle;;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -36,8 +38,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     private boolean vibrationOn;
     private final String SETTINGS_FILE = "SettingsFile";
     private SharedPreferences sharedPreferences;
-//    private LocationCallback locationCallback;
-//    private LocationRequest locationRequest;
     private static final int REQUEST_CODE = 101;
     private boolean locationHasBeenSetUp = false;
 
@@ -146,6 +146,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     }
 
     private void showHighScores(){
+
             Intent intent = new Intent(this, HighScoreScreen.class);
             intent.putExtra("music", musicOn);
             startActivity(intent);
@@ -170,7 +171,6 @@ public class OpenScreen extends Activity implements HighScoreVariables {
                     locationHasBeenSetUp = true;
                     return;
                 }
-
             }
         });
         //if you are here it means get location failed.
@@ -184,9 +184,9 @@ public class OpenScreen extends Activity implements HighScoreVariables {
     }
 
     private void setLocationManually(){
-        //New York
-        lat = 40.730610;
-        lon = -73.935242;
+
+        lat = 32.113490;
+        lon = 34.817853;
     }
 //    private void createLocationRequest(){
 //
@@ -197,7 +197,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
 //        locationRequest.setInterval(100);
 //        locationRequest.setFastestInterval(100);
 //    }
-//
+
 //    private void createLocationCallback(){
 //
 //        Log.d("TUGA", "inside cretaeCallBack");
@@ -213,7 +213,7 @@ public class OpenScreen extends Activity implements HighScoreVariables {
 //                    Log.d("TUGA", "OR maybe im here?");
 //                    currentLocation = location;
 //                }
-//                Log.d("TUGA", "fetchLocation: its good");
+//
 //                lat = currentLocation.getLatitude();
 //                lon  = currentLocation.getLongitude();
 //                locationHasBeenSetUp = true;
